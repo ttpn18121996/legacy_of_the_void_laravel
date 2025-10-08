@@ -134,4 +134,13 @@ class VideoController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function incrementLike(Request $request)
+    {
+        $videoId = $request->input('video_id');
+
+        $result = $this->videoService->incrementLike($videoId);
+
+        return response()->json(['success' => $result]);
+    }
 }

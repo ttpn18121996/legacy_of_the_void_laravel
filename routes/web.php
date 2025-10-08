@@ -31,6 +31,7 @@ Route::group([
     Route::post('/videos/update-tags', [VideoController::class, 'updateTags'])->name('videos.update-tags');
     Route::post('/videos/update-actresses', [VideoController::class, 'updateActresses'])->name('videos.update-actresses');
     Route::post('/videos/update-categories', [VideoController::class, 'updateCategories'])->name('videos.update-categories');
+    Route::post('/videos/increment-like', [VideoController::class, 'incrementLike'])->name('videos.increment-like');
     Route::get('/videos/{id}', [VideoController::class, 'show'])->name('videos.show');
 
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');

@@ -6,9 +6,8 @@ use App\Models\Actress;
 use App\Models\Tag;
 use App\Models\Video;
 use App\Models\VideoThumbnail;
-use Illuminate\Container\Attributes\Log;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log as FacadesLog;
+use Illuminate\Support\Facades\Log;
 
 class VideoService
 {
@@ -144,5 +143,24 @@ class VideoService
             ->orderBy('title')
             ->limit(10)
             ->get(['id', 'title']);
+    }
+
+    public function incrementLike(string $videoId): bool
+    {
+        $video = Video::find($videoId);
+        if ($video->latest_like && $video->latest_like > now()->subDay()) {
+            return false;
+        }
+
+        try {
+            $video->latest_like = now();
+            $video->like = $video->like + 1;
+            $video->saveQuietly();
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error("Error incrementing like for video ID {$videoId}: " . $e->getMessage());
+            return false;
+        }
     }
 }

@@ -1,7 +1,14 @@
 'use strict';
 
 const videosShow = function (setting = {}) {
-  const { updateTagsUrl, updateActressesUrl, updateCategoriesUrl, getActressesOptionsUrl, getTagsOptionsUrl } = setting;
+  const {
+    updateTagsUrl,
+    updateActressesUrl,
+    updateCategoriesUrl,
+    getActressesOptionsUrl,
+    getTagsOptionsUrl,
+    incrementLikeUrl,
+  } = setting;
   const videoId = setting.videoId;
 
   if (!videoId) {
@@ -169,6 +176,33 @@ const videosShow = function (setting = {}) {
           loadTagsOptions();
         });
       }
+    });
+  }
+
+  if (incrementLikeUrl) {
+    const btnLike = document.getElementById('btn-like');
+    btnLike.addEventListener('click', e => {
+      e.preventDefault();
+      lotv.ajax({
+        method: 'POST',
+        url: incrementLikeUrl,
+        data: {
+          video_id: videoId,
+        },
+        success: res => {
+          if (res?.success) {
+            let currentLike = parseInt(btnLike.innerText.match(/\d+/));
+            currentLike = isNaN(currentLike) ? 0 : currentLike;
+            btnLike.innerHTML = btnLike.innerHTML.replace(/\(\d+\)/, `(${currentLike + 1})`);
+          } else {
+            lotv.toast.fire({
+            title: 'Error',
+            message:'An error occurred while trying to like the video.',
+            type: 'error',
+          });
+          }
+        },
+      });
     });
   }
 };
