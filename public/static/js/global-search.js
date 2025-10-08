@@ -82,7 +82,11 @@ const globalSearch = {
       suggestion.appendChild(tagGroup);
     }
 
-    formSearch.appendChild(suggestion);
+    formSearch.querySelector('.form-search__suggestion')?.remove();
+
+    if (suggestion.children.length > 0) {
+      formSearch.appendChild(suggestion);
+    }
   },
 
   createGroup: title => {
