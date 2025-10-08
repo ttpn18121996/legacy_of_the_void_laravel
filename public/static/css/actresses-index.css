@@ -1,0 +1,22 @@
+.actress-card__thumbnails {
+    overflow: hidden;
+    height: auto;
+}
+.actress-card__thumbnails img {
+    display: block;
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+}
+.actress-card__name {
+    width: 100%;
+    font-size: 1.25rem;
+    text-align: center;
+    height: 4rem;
+}
+
+@media screen and (min-width: 640px) {
+    .actress-card__thumbnails {
+        height: 24rem;
+    }
+}

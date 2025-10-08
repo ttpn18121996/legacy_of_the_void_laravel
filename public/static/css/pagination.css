@@ -1,0 +1,49 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.pagination-mobile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pagination ul {
+    list-style-type: none;
+    display: none;
+}
+.pagination ul > li + li,
+.pagination-mobile a + a {
+    margin-left: .5rem;
+}
+.pagination ul > li.active span {
+    background-color: var(--dark);
+    color: var(--light);
+    border-color: var(--dark);
+}
+.pagination ul > li > a,
+.pagination ul > li > span,
+.pagination-mobile a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .25rem;
+    border: 1px solid #ccc;
+}
+.pagination ul > li > a:hover {
+    background-color: var(--slate-100);
+    cursor: pointer;
+}
+@media screen and (min-width: 640px) {
+    .pagination ul {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .pagination .pagination-mobile {
+        display: none;
+    }
+}

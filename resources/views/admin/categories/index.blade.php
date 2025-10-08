@@ -1,0 +1,73 @@
+@extends('layouts.app')
+
+@section('title', 'Category management')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('static/css/modal.css?v='.time()) }}">
+    <link rel="stylesheet" href="{{ asset('static/css/toast.css?v='.time()) }}">
+@endpush
+
+@section('content')
+    <div class="main__body">
+        <div class="main__body-form">
+            <form action="" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-input" name="title" id="title" placeholder="Tag title">
+                    @error('title')
+                        <label for="title" class="text-error">{{ $message }}</label>
+                    @enderror
+                </div>
+                <div>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+
+        <table class="table hide-on-mobile" id="categories-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Slug</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($categories as $category)
+                    <tr>
+                        <td>{{ $category->id }}</td>
+                        <td class="editable">
+                            <input type="text" value="{{ $category->title }}" id="category{{ $category->id }}">
+                        </td>
+                        <td id="slug{{ $category->id }}">{{ $category->slug }}</td>
+                        <td>
+                            <div class="table__actions space-x-2">
+                                <button
+                                    data-id="{{ $category->id }}"
+                                    data-url="{{ route('admin.categories.update', ['id' => $category->id]) }}"
+                                    class="btn-sm btn-primary btn-edit"
+                                >
+                                    Edit
+                                </button>
+                                <button data-id="{{ $category->id }}" class="btn-sm btn-secondary btn-delete">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" style="text-align: center;">No data found.</td></td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+@endsection
+
+@push('scripts')
+    <script src="{{ asset('static/js/admin/categories-index.js?v='.time()) }}"></script>
+    <script>
+        categoriesIndex();
+    </script>
+@endpush

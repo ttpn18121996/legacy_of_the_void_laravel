@@ -1,0 +1,130 @@
+.video-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.video {
+    width: 100%;
+    overflow: hidden;
+}
+
+.video__player {
+    border-radius: .25rem;
+    width: 100%;
+    overflow: hidden;
+}
+
+.video__player video {
+    width: 100%;
+}
+
+.video__title {
+    font-weight: 600;
+    line-height: 1.25;
+    font-size: 1.5rem;
+}
+
+.video__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.video__actions button {
+    width: 100px;
+    height: 2.5rem;
+    border-radius: .25rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+}
+
+.video__actions--info {
+    background-color: var(--info);
+}
+
+.video__actions--info:hover {
+    background-color: var(--info-hover);
+}
+
+.video__actions--success {
+    background-color: var(--success);
+}
+
+.video__actions--success:hover {
+    background-color: var(--success-hover);
+}
+
+.video__actions--warning {
+    background-color: var(--warning);
+}
+
+.video__actions--warning:hover {
+    background-color: var(--warning-hover);
+}
+
+.video__actions--danger {
+    background-color: var(--danger);
+}
+
+.video__actions--danger:hover {
+    background-color: var(--danger-hover);
+}
+
+.relationship__section {
+    margin-bottom: 2rem;
+}
+
+.section__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.section__body {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.section__body>*+* {
+    margin-left: .5rem;
+}
+
+.section__body-preview {
+    width: 100%;
+    height: 9rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.section__body-preview img {
+    display: block;
+    height: 9rem;
+    object-fit: cover;
+    object-position: center;
+}
+
+.section__body-preview *+* {
+    margin-left: .5rem;
+}
+
+@media screen and (min-width: 1024px) {
+    .video {
+        max-width: 64rem;
+    }
+}
+
+@media screen and (min-width: 1536px) {
+    .video-wrapper {
+        max-width: 64rem;
+    }
+}
