@@ -20,6 +20,8 @@ class Video extends Model
         'dimensions',
         'created_at',
         'updated_at',
+        'like',
+        'latest_like',
     ];
 
     public function thumbnails(): HasMany
