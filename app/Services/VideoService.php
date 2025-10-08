@@ -140,6 +140,7 @@ class VideoService
     public function search(string $keyword)
     {
         return $this->video->where('title', 'like', "%{$keyword}%")
+            ->orderByDesc('latest_like')
             ->orderBy('title')
             ->limit(10)
             ->get(['id', 'title']);
