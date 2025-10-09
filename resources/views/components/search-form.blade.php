@@ -4,7 +4,8 @@
 ])
 
 <div class="filter-wrapper space-y-4">
-    <form action="{{ $action }}" method="get" class="form-search" id="form-search">
+    <form action="{{ $action }}" method="GET" class="form-search" id="form-search">
+        {!! fill_input_to_sort() !!}
         <div class="form-search__box">
             <input type="search" name="q" value="{{ request()->query('q') }}" placeholder="Search..." autocomplete="off" />
             <button type="submit">

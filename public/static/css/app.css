@@ -314,6 +314,35 @@ input.form-input:focus {
     background-color: var(--slate-100);
 }
 
+.data__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.data__controls form {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+}
+
+.data__control-item {
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+
+.data__control-item select {
+    padding: .5rem .5rem;
+    border-radius: .25rem;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
 .tag__button {
     border-radius: .25rem;
     background: var(--dark);

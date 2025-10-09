@@ -1,5 +1,27 @@
 <?php
 
+use Illuminate\Support\Arr;
+
+if (! function_exists('fill_input_to_sort')) {
+    function fill_input_to_sort(): string
+    {
+        $html = '';
+        $query = Arr::except(request()->query(), ['sort_by', 'destination', 'page']);
+
+        foreach ($query as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $html .= "<input type=\"hidden\" name=\"{$key}[]\" value=\"{$item}\">";
+                }
+            } else {
+                $html .= "<input type=\"hidden\" name=\"{$key}\" value=\"{$value}\">";
+            }
+        }
+
+        return $html;
+    }
+}
+
 if (! function_exists('get_filter_tag_url')) {
     function get_filter_tag_url(string $tagSlug, bool $addTag = true): string
     {

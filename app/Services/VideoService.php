@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\SortDestination;
+use App\Enums\VideoSort;
 use App\Models\Actress;
 use App\Models\Tag;
 use App\Models\Video;
@@ -27,7 +29,7 @@ class VideoService
                 ->pluck('tag_video.video_id');
         }
 
-        $videos = Video::with(['thumbnails', 'tags'])
+        $builder = Video::with(['thumbnails', 'tags'])
             ->when($q, function ($query) use ($q, $videoIds) {
                 $query->where('title', 'like', "%{$q}%")
                     ->orWhereIn('id', $videoIds);
@@ -36,9 +38,20 @@ class VideoService
                 $query->whereHas('tags', function ($query) use ($tagSlugs) {
                     $query->whereIn('slug', $tagSlugs);
                 }, '=', count($tagSlugs));
-            })
-            ->latest()
-            ->paginate(20)
+            });
+
+        if ($sortBy = Arr::get($filters, 'sort_by')) {
+            $destination = Arr::get($filters, 'destination', SortDestination::DESCENDING->value);
+            if ($sortBy === VideoSort::MOST_LIKED->value) {
+                $builder->orderBy('like', $destination)->orderByDesc('latest_like')->latest();
+            } else {
+                $builder->orderBy('created_at', $destination);
+            }
+        } else {
+            $builder->latest();
+        }
+
+        $videos = $builder->paginate(20)
             ->onEachSide(2)
             ->withQueryString();
 
