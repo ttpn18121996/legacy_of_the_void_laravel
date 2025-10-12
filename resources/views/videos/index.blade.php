@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@use('App\Enums\SortDestination');
-@use('App\Enums\VideoSort');
+@use('App\Enums\SortDestination')
+@use('App\Enums\VideoSort')
 
 @section('title', 'Videos')
 
