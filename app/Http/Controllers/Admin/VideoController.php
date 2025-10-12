@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 class VideoController extends Controller
 {
     public function __construct(
-        private ActressService $actressService,
-        private VideoService $videoService,
-        private TagService $tagService,
+        protected ActressService $actressService,
+        protected VideoService $videoService,
+        protected TagService $tagService,
     ) {}
 
     public function index(Request $request)
@@ -66,6 +66,9 @@ class VideoController extends Controller
     {
         $this->videoService->delete($id);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Video deleted successfully.',
+        ]);
     }
 }

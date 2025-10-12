@@ -4,6 +4,7 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('static/css/pagination.css') }}">
+    <link rel="stylesheet" href="{{ asset('static/css/toast.css?v='.time()) }}">
 @endpush
 
 @section('content')
@@ -16,10 +17,10 @@
     </div>
     <div class="main__body">
         <div class="main__body-actions space-x-2">
-            <a href="{{ route('admin.actresses.create') }}" class="btn btn-primary">Add new</a>
+            <a href="{{ route('admin.actresses.create') }}" class="btn btn--primary">Add new</a>
         </div>
 
-        <table class="table hide-on-mobile mb-4" id="tags-table">
+        <table class="table hide-on-mobile mb-4" id="actresses-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -30,7 +31,7 @@
             </thead>
             <tbody>
                 @forelse($actresses as $actress)
-                    <tr>
+                    <tr id="actress{{ $actress->id }}">
                         <td>{{ $actress->id }}</td>
                         <td>
                             <div class="table__thumbnail">
@@ -54,8 +55,21 @@
                         </td>
                         <td>
                             <div class="table__actions space-x-2">
-                                <a href="{{ route('admin.actresses.edit', ['id' => $actress->id]) }}" class="btn-sm btn-primary">Edit</a>
-                                <button data-id="{{ $actress->id }}" class="btn-sm btn-danger btn-delete">Delete</button>
+                                <a href="{{ route('admin.actresses.edit', ['id' => $actress->id]) }}" class="btn--sm btn--primary">Edit</a>
+                                <button
+                                    data-id="{{ $actress->id }}"
+                                    data-url="{{ route('admin.actresses.update-thumbnail', ['id' => $actress->id]) }}"
+                                    class="btn--sm btn--info btn-update-thumbnail"
+                                >
+                                    Update thumbnail
+                                </button>
+                                <button
+                                    data-id="{{ $actress->id }}"
+                                    data-url="{{ route('admin.actresses.destroy', ['id' => $actress->id]) }}"
+                                    class="btn--sm btn--danger btn-delete"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -72,6 +86,9 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('static/js/confirm-dialog.js?v='.time()) }}"></script>
+    <script src="{{ asset('static/js/admin/actresses-index.js?v='.time()) }}"></script>
     <script>
+        actressesIndex();
     </script>
 @endpush

@@ -47,11 +47,18 @@ window.lotv = (function () {
       '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-lg icon-success"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
     iconError:
       '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-lg icon-danger"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>',
-    fire({ title = '', message = '', type = 'success' }) {
+    fire({ title = '', message = '', type = 'success', duration = 3000 }) {
       const toastId = `toast-${this.identifier}`;
       const eleToastTitleText = document.createElement('div');
       eleToastTitleText.classList.add('toast__title-text', 'space-x-2');
       eleToastTitleText.innerHTML = `${type === 'success' ? this.iconSuccess : this.iconError}<span>${title}</span>`;
+
+      const handleClose = target => {
+        const _target = document.getElementById(target);
+        _target.style.opacity = 0;
+        this.timeout && clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => _target.remove(), 500);
+      };
 
       const eleToastClose = document.createElement('button');
       eleToastClose.classList.add('toast__title-close');
@@ -60,10 +67,7 @@ window.lotv = (function () {
         '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
       eleToastClose.addEventListener('click', e => {
         e.preventDefault();
-        const target = document.getElementById(eleToastClose.dataset.target);
-        target.style.opacity = 0;
-        this.timeout && clearTimeout(this.timeout);
-        this.timeout = setTimeout(() => target.remove(), 500);
+        handleClose(eleToastClose.dataset.target);
       });
 
       const eleToastTitle = document.createElement('div');
@@ -80,6 +84,13 @@ window.lotv = (function () {
       eleToast.id = toastId;
       eleToast.appendChild(eleToastTitle);
       eleToast.appendChild(eleToastMessage);
+
+      if (duration > 0) {
+        let timeout = setTimeout(() => {
+          handleClose(toastId);
+          clearTimeout(timeout);
+        }, duration);
+      }
 
       document.body.appendChild(eleToast);
       this.identifier++;

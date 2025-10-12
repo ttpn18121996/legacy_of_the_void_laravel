@@ -34,8 +34,8 @@
             </div>
 
             <div class="form-button space-x-2">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a class="btn btn-secondary" href="{{  route('admin.actresses.index') }}">Back to list</a>
+                <button type="submit" class="btn btn--primary">Save</button>
+                <a class="btn btn--secondary" href="{{  route('admin.actresses.index') }}">Back to list</a>
             </div>
         </form>
     </div>

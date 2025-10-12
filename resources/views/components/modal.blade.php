@@ -10,7 +10,7 @@
         <div class="modal__header">
             <div class="modal__title">{{ $title }}</div>
             <div class="modal__close">
-                <button type="button" class="btn-secondary btn-circle close-modal">&times;</button>
+                <button type="button" class="btn--secondary btn--circle close-modal">&times;</button>
             </div>
         </div>
         <div class="modal__body">

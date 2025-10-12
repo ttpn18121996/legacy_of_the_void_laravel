@@ -92,7 +92,7 @@ class VideoService
         return $video;
     }
 
-    public function delete(string $id)
+    public function delete(string $id): bool
     {
         $video = Video::findOrFail($id);
 

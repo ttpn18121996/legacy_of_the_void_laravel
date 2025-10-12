@@ -8,6 +8,9 @@
 @endpush
 
 @section('content')
+    <div class="main__header">
+        <x-search-form />
+    </div>
     <div class="main__body">
         <div class="video-wrapper">
             <div class="video">

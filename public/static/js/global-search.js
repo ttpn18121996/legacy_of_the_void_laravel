@@ -3,6 +3,10 @@
 const globalSearch = {
   init: () => {
     const formSearch = document.getElementById('form-search');
+    if (!formSearch) {
+      return;
+    }
+
     const inputSearch = formSearch.querySelector('input[name="q"]');
     let timeout = null;
 

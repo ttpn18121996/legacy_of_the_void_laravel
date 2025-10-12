@@ -11,22 +11,40 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.'
 ], function () {
-    Route::get('/actresses', [ActressController::class, 'index'])->name('actresses.index');
-    Route::get('/actresses/create', [ActressController::class, 'create'])->name('actresses.create');
-    Route::post('/actresses', [ActressController::class, 'store'])->name('actresses.store');
-    Route::get('/actresses/{id}/edit', [ActressController::class, 'edit'])->name('actresses.edit');
-    Route::put('/actresses/{id}', [ActressController::class, 'update'])->name('actresses.update');
+    Route::group([
+        'prefix' => 'actresses',
+        'as' => 'actresses.'
+    ], function () {
+        Route::get('/', [ActressController::class, 'index'])->name('index');
+        Route::get('/create', [ActressController::class, 'create'])->name('create');
+        Route::post('/', [ActressController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [ActressController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [ActressController::class, 'update'])->name('update');
+        Route::patch('/{id}/update-thumbnail', [ActressController::class, 'updateThumbnail'])->name('update-thumbnail');
+        Route::delete('/{id}', [ActressController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
     Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update');
 
-    Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
-    Route::post('/tags', [TagController::class, 'store'])->name('tags.store');
-    Route::put('/tags/{id}', [TagController::class, 'update'])->name('tags.update');
+    Route::group([
+        'prefix' => 'tags',
+        'as' => 'tags.'
+    ], function () {
+        Route::get('/', [TagController::class, 'index'])->name('index');
+        Route::post('/', [TagController::class, 'store'])->name('store');
+        Route::put('/{id}', [TagController::class, 'update'])->name('update');
+        Route::delete('/{id}', [TagController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
-    Route::get('/videos/{id}/edit', [VideoController::class, 'edit'])->name('videos.edit');
-    Route::put('/videos/{id}', [VideoController::class, 'update'])->name('videos.update');
-    Route::delete('/videos/{id}', [VideoController::class, 'destroy'])->name('videos.destroy');
+    Route::group([
+        'prefix' => 'videos',
+        'as' => 'videos.'
+    ], function () {
+        Route::get('/', [VideoController::class, 'index'])->name('index');
+        Route::get('/{id}/edit', [VideoController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [VideoController::class, 'update'])->name('update');
+        Route::delete('/{id}', [VideoController::class, 'destroy'])->name('destroy');
+    });
 });

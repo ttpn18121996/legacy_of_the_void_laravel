@@ -45,6 +45,8 @@ Route::group([
     Route::get('/options/tags', [OptionController::class, 'getTags'])->name('options.get-tags');
 
     Route::get('/global-search', GlobalSeachController::class)->name('global-search');
+
+    Route::view('/blank', 'blank')->name('blank');
 });
 
 require __DIR__.'/admin.php';

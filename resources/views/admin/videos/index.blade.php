@@ -5,6 +5,7 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('static/css/videos-index.css') }}">
     <link rel="stylesheet" href="{{ asset('static/css/pagination.css') }}">
+    <link rel="stylesheet" href="{{ asset('static/css/toast.css?v='.time()) }}">
 @endpush
 
 @section('content')
@@ -71,11 +72,11 @@
                         <td>{{ $video->dimensions }}</td>
                         <td>
                             <div class="table__actions space-x-2">
-                                <a href="{{ route('admin.videos.edit', ['id' => $video->id]) }}" class="btn-sm btn-primary">Edit</a>
+                                <a href="{{ route('admin.videos.edit', ['id' => $video->id]) }}" class="btn--sm btn--primary">Edit</a>
                                 <button
                                     data-id="{{ $video->id }}"
                                     data-url="{{ route('admin.videos.destroy', ['id' => $video->id]) }}"
-                                    class="btn-sm btn-danger btn-delete"
+                                    class="btn--sm btn--danger btn-delete"
                                 >
                                     Delete
                                 </button>
@@ -95,6 +96,7 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('static/js/confirm-dialog.js?v='.time()) }}"></script>
     <script src="{{ asset('static/js/admin/videos-index.js?v='.time()) }}"></script>
     <script>
         videosIndex();

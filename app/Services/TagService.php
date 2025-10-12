@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 class TagService
 {
     public function __construct(
-        private Tag $tag,
+        protected Tag $tag,
     ) {}
 
     public function all(array $filters = [])
@@ -52,6 +52,16 @@ class TagService
         $tag->save();
 
         return $tag->fresh();
+    }
+
+    public function delete(string $id): true
+    {
+        $tag = $this->find($id);
+        $tag->videos()->detach();
+        $tag->actresses()->detach();
+        $tag->delete();
+
+        return true;
     }
 
     public function getOptions()

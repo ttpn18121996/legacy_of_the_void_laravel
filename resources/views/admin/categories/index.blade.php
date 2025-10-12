@@ -20,7 +20,7 @@
                     @enderror
                 </div>
                 <div>
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn--primary">Save</button>
                 </div>
             </form>
         </div>
@@ -47,11 +47,11 @@
                                 <button
                                     data-id="{{ $category->id }}"
                                     data-url="{{ route('admin.categories.update', ['id' => $category->id]) }}"
-                                    class="btn-sm btn-primary btn-edit"
+                                    class="btn--sm btn--primary btn-edit"
                                 >
                                     Edit
                                 </button>
-                                <button data-id="{{ $category->id }}" class="btn-sm btn-secondary btn-delete">Delete</button>
+                                <button data-id="{{ $category->id }}" class="btn--sm btn--secondary btn-delete">Delete</button>
                             </div>
                         </td>
                     </tr>

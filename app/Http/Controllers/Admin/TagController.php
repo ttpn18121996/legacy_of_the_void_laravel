@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class TagController extends Controller
 {
     public function __construct(
-        private TagService $tagService,
+        protected TagService $tagService,
     ) {}
 
     public function index(Request $request)
@@ -48,6 +48,16 @@ class TagController extends Controller
             'success' => true,
             'message' => 'Tag updated successfully.',
             'data' => $tag,
+        ]);
+    }
+
+    public function destroy(string $id)
+    {
+        $this->tagService->delete($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tag deleted successfully.',
         ]);
     }
 }

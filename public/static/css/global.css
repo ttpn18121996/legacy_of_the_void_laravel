@@ -166,7 +166,7 @@ body {
 }
 
 .btn,
-.btn-sm {
+.btn--sm {
     border-radius: 0.25rem;
     border: none;
     cursor: pointer;
@@ -181,39 +181,48 @@ body {
     font-size: 1rem;
 }
 
-.btn-sm {
+.btn--sm {
     padding: .5rem 1rem;
     font-size: .75rem;
 }
 
-.btn-primary {
+.btn--primary {
     background-color: var(--dark);
     color: var(--light);
 }
 
-.btn-primary:hover {
+.btn--primary:hover {
     background-color: var(--dark-hover);
 }
 
-.btn-secondary {
+.btn--secondary {
     background-color: var(--slate-300);
     color: var(--dark);
 }
 
-.btn-secondary:hover {
+.btn--secondary:hover {
     opacity: .75;
 }
 
-.btn-danger {
+.btn--info {
+    background-color: var(--info);
+    color: var(--light);
+}
+
+.btn--info:hover {
+    background-color: var(--info-hover);
+}
+
+.btn--danger {
     background-color: var(--danger);
     color: var(--light);
 }
 
-.btn-danger:hover {
+.btn--danger:hover {
     background-color: var(--danger-hover);
 }
 
-.btn-circle {
+.btn--circle {
     border: none;
     border-radius: 100%;
     width: 2rem;
@@ -368,4 +377,58 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.dialog__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 70;
+}
+
+.dialog__box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--light);
+    border-radius: .25rem;
+    width: 24rem;
+    max-height: 50vh;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    overflow-y: auto;
+    z-index: 80;
+}
+
+.dialog__header {
+    width: 100%;
+    padding: .5rem 1rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.dialog__body {
+    width: 100%;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    color: var(--dark);
+}
+
+.dialog__footer {
+    margin-top: 1rem;
+    width: 100%;
+    padding: .5rem 1rem;
+    display: flex;
+    justify-content: end;
+}
+
+.dialog__footer * + * {
+    margin-left: .5rem;
 }

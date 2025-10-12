@@ -35,7 +35,7 @@
                     </select>
                 </div>
                 <div class="data__control-item">
-                    <button class="btn-sm btn-primary">Apply</button>
+                    <button class="btn--sm btn--primary">Apply</button>
                 </div>
             </form>
         </div>

@@ -93,7 +93,7 @@
             </x-slot>
 
             <x-slot name="footer">
-                <button class="btn btn-primary" id="update-actresses">Save</button>
+                <button class="btn btn--primary" id="update-actresses">Save</button>
             </x-slot>
         </x-modal>
     </div>
@@ -104,7 +104,7 @@
             </x-slot>
 
             <x-slot name="footer">
-                <button class="btn btn-primary" id="update-categories">Save</button>
+                <button class="btn btn--primary" id="update-categories">Save</button>
             </x-slot>
         </x-modal>
     </div>
@@ -115,7 +115,7 @@
             </x-slot>
 
             <x-slot name="footer">
-                <button class="btn btn-primary" id="update-tags">Save</button>
+                <button class="btn btn--primary" id="update-tags">Save</button>
             </x-slot>
         </x-modal>
     </div>

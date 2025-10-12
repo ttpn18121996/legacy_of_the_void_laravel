@@ -59,7 +59,7 @@
             </x-slot>
 
             <x-slot name="footer">
-                <button class="btn btn-primary" id="update-tags">Save</button>
+                <button class="btn btn--primary" id="update-tags">Save</button>
             </x-slot>
         </x-modal>
     </div>

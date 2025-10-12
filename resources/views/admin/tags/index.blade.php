@@ -20,7 +20,7 @@
                     @enderror
                 </div>
                 <div>
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn--primary">Save</button>
                 </div>
             </form>
         </div>
@@ -36,7 +36,7 @@
             </thead>
             <tbody>
                 @forelse($tags as $tag)
-                    <tr>
+                    <tr id="tag{{ $tag->id }}">
                         <td>{{ $tag->id }}</td>
                         <td class="editable">
                             <input type="text" value="{{ $tag->title }}" id="tag{{ $tag->id }}">
@@ -47,11 +47,17 @@
                                 <button
                                     data-id="{{ $tag->id }}"
                                     data-url="{{ route('admin.tags.update', ['id' => $tag->id]) }}"
-                                    class="btn-sm btn-primary btn-edit"
+                                    class="btn--sm btn--primary btn-edit"
                                 >
                                     Edit
                                 </button>
-                                <button data-id="{{ $tag->id }}" class="btn-sm btn-secondary btn-delete">Delete</button>
+                                <button
+                                    data-id="{{ $tag->id }}"
+                                    data-url="{{ route('admin.tags.destroy', ['id' => $tag->id]) }}"
+                                    class="btn--sm btn--secondary btn-delete"
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -66,6 +72,7 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('static/js/confirm-dialog.js?v='.time()) }}"></script>
     <script src="{{ asset('static/js/admin/tags-index.js?v='.time()) }}"></script>
     <script>
         tagsIndex();

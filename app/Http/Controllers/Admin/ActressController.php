@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Services\ActressService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class ActressController extends Controller
 {
     public function __construct(
-        private ActressService $actressService,
+        protected ActressService $actressService,
     ) {}
 
     public function index(Request $request)
@@ -95,5 +96,25 @@ class ActressController extends Controller
         }
 
         return to_route('admin.actresses.index');
+    }
+
+    public function updateThumbnail(string $id)
+    {
+        $actress = $this->actressService->find($id);
+        Artisan::call('app:sync-actress-thumbnail', [
+            '--name' => $actress->name,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function destroy(string $id)
+    {
+        $this->actressService->delete($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Delete successfully.',
+        ]);
     }
 }

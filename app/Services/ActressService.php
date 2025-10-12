@@ -89,6 +89,16 @@ class ActressService
         return true;
     }
 
+    public function delete(int $id): bool
+    {
+        $actress = $this->find($id);
+        $actress->tags()->detach();
+        $actress->videos()->detach();
+        $actress->delete();
+
+        return true;
+    }
+
     public function getOptions()
     {
         return $this->actress->orderBy('name')->get()

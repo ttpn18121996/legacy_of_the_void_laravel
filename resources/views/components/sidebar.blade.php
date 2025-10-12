@@ -93,4 +93,13 @@
             </a>
         </li>
     </ul>
+
+    <p class="sidebar-group-title">General</p>
+    <ul class="menu">
+        <li>
+            <a class="space-x-4" href="{{ route('blank') }}">
+                <p>Blank</p>
+            </a>
+        </li>
+    </ul>
 </nav>
