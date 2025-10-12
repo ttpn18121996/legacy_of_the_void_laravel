@@ -10,8 +10,8 @@ enum SortDestination: string
     public static function labels(): array
     {
         return [
-            self::ASCENDING->value => 'Ascending',
-            self::DESCENDING->value => 'Descending',
+            self::ASCENDING->value => 'ASC',
+            self::DESCENDING->value => 'DESC',
         ];
     }
 }

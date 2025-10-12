@@ -34,7 +34,9 @@
                         @endforeach
                     </select>
                 </div>
-                <button class="btn-sm btn-primary">Apply</button>
+                <div class="data__control-item">
+                    <button class="btn-sm btn-primary">Apply</button>
+                </div>
             </form>
         </div>
 

@@ -147,7 +147,7 @@ main {
     align-items: center;
     flex-wrap: wrap;
     flex-direction: column;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -247,7 +247,6 @@ input.form-input:focus {
     height: 2.5rem;
     padding: 0 1rem;
     overflow: hidden;
-    margin-bottom: 1rem;
 }
 
 .form-search__box input {
@@ -325,15 +324,18 @@ input.form-input:focus {
 
 .data__controls form {
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: end;
     width: 100%;
+    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .data__control-item {
     display: flex;
     align-items: center;
     margin-left: 1rem;
+    margin-bottom: .5rem;
 }
 
 .data__control-item select {
@@ -565,6 +567,12 @@ input.form-input:focus {
 
     .hide-on-mobile {
         display: table;
+    }
+
+    .data__controls form {
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
     }
 }
 
