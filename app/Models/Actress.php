@@ -14,6 +14,7 @@ class Actress extends Model
     protected $fillable = [
         'name',
         'another_name',
+        'thumbnail_path',
         'created_at',
         'updated_at',
     ];
@@ -25,6 +26,6 @@ class Actress extends Model
 
     protected function getPath(): string
     {
-        return str($this->attributes['name'])->slug()->prepend('actresses/')->append('.jpg')->toString();
+        return $this->attributes['thumbnail_path'] ?? 'actresses/thumbnail-default.jpg';
     }
 }

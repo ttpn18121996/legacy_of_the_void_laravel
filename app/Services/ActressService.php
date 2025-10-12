@@ -5,6 +5,10 @@ namespace App\Services;
 use App\Models\Actress;
 use App\Models\Tag;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use LogicException;
+use RuntimeException;
 
 class ActressService
 {
@@ -40,12 +44,31 @@ class ActressService
     {
         $name = Arr::get($data, 'name');
 
-        $this->actress->name = $name;
-        $this->actress->another_name = Arr::get($data, 'another_name') ?? $name;
-        $this->actress->save();
-        $this->actress->tags()->attach(Arr::get($data, 'tags', []));
+        try {
+            $existingActress = $this->actress->where('name', $name)->first();
+            if ($existingActress) {
+                throw new LogicException('Actress with the same name already exists.');
+            }
 
-        return true;
+            $this->actress->name = $name;
+            $this->actress->another_name = Arr::get($data, 'another_name') ?? $name;
+            $this->actress->save();
+            $this->actress->tags()->attach(Arr::get($data, 'tags', []));
+
+            $code = Artisan::call('app:sync-actress-thumbnail', [
+                '--name' => $name,
+            ]);
+
+            if ($code !== 0) {
+                throw new RuntimeException('Failed to sync actress thumbnail.');
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error creating actress: ' . $e->getMessage());
+
+            return false;
+        }
     }
 
     public function find(int $id)
