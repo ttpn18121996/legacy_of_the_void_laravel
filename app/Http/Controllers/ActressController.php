@@ -18,12 +18,10 @@ class ActressController extends Controller
 
     public function index(Request $request)
     {
-        $q = $request->query('q');
-
         $tagSlugs = $request->query('tags', []);
         $filteredTags = Tag::whereIn('slug', $tagSlugs)->get();
 
-        $actresses = $this->actressService->paginate(['q' => $q]);
+        $actresses = $this->actressService->paginate($request->query());
 
         return view('actresses.index', [
             'actresses' => $actresses,

@@ -20,6 +20,7 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::post('/', [HomeController::class, 'search'])->name('search');
 
     Route::get('/actresses', [ActressController::class, 'index'])->name('actresses.index');
     Route::post('/actresses/update-tags', [ActressController::class, 'updateTags'])->name('actresses.update-tags');
