@@ -35,7 +35,7 @@
                     Publish
                 </button>
             @endif
-            <form action="{{ route('reviews.destroy', ['title' => $title, 'path' => $path]) }}" method="POST">
+            <form action="{{ route('list-view.destroy', ['title' => $title, 'path' => $path]) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="video__actions--danger" type="submit">
@@ -50,7 +50,7 @@
     <script src="{{ asset('static/js/list-view-watch.js?v='.time()) }}"></script>
     <script>
         listViewWatch({
-            publishUrl: "{{ route('reviews.update') }}",
+            publishUrl: "{{ route('list-view.update') }}",
             videoTitle: "{!! $title !!}",
         });
     </script>
