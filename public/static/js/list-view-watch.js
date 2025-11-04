@@ -18,7 +18,7 @@ const listViewWatch = function (setting = {}) {
         },
         success: res => {
           if (res?.success) {
-            window.location.href = '/approved';
+            window.location.href = '/list-view?path=approved';
           } else {
             lotv.toast.fire({
               title: 'Error',

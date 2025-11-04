@@ -7,7 +7,7 @@
 @section('content')
     <div class="main__header">
         <div class="filter-wrapper space-y-4">
-            <div class="form-search" id="reviews-search">
+            <div class="form-search" id="list-view-search">
                 <div class="form-search__box">
                     <input type="search" name="q" placeholder="Search..." />
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PathType;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 class ListViewController extends Controller
 {
