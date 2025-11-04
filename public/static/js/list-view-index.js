@@ -1,6 +1,6 @@
 'use strict';
 
-const reviewIndex = function () {
+const listViewIndex = function () {
   const frmSearch = document.getElementById('reviews-search');
   const inputSearch = frmSearch.querySelector('input[type="search"]');
   inputSearch.addEventListener('input', function (e) {

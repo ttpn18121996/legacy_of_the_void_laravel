@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PathType;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 
-class ReviewController extends Controller
+class ListViewController extends Controller
 {
     public function __construct(
-        private VideoService $videoService,
+        protected VideoService $videoService,
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $reviewPath = storage_path('app/public/reviews');
+        $path = $request->query('path', PathType::REVIEW->value);
+        $reviewPath = storage_path('app/public/'.$path);
         $videos = scandir($reviewPath);
 
         if ($videos !== false) {
@@ -22,41 +23,20 @@ class ReviewController extends Controller
                 ->filter(fn ($file) => $file !== '.' && $file !== '..')
                 ->map(fn ($file) => ((object) [
                     'title' => (string) str($file)->basename('.mp4'),
-                    'path' => 'reviews',
+                    'path' => $path,
                 ]))
                 ->values();
         }
 
-        return view('reviews.index', [
+        return view('list-view.index', [
             'videos' => $videos,
-            'title' => 'Review Videos',
-        ]);
-    }
-
-    public function approved()
-    {
-        $approvedPath = storage_path('app/public/approved');
-        $videos = scandir($approvedPath);
-
-        if ($videos !== false) {
-            $videos = collect($videos)
-                ->filter(fn ($file) => $file !== '.' && $file !== '..')
-                ->map(fn ($file) => ((object) [
-                    'title' => (string) str($file)->basename('.mp4'),
-                    'path' => 'approved',
-                ]))
-                ->values();
-        }
-
-        return view('reviews.index', [
-            'videos' => $videos,
-            'title' => 'Approved Videos',
+            'title' => PathType::from($path)->value,
         ]);
     }
 
     public function show(Request $request)
     {
-        return view('reviews.watch', [
+        return view('list-view.watch', [
             'title' => $request->query('title'),
             'path' => $request->query('path'),
         ]);
@@ -66,7 +46,14 @@ class ReviewController extends Controller
     {
         $title = $request->input('title');
         $path = $request->input('path');
-        $pathTo = $path === 'reviews' ? 'approved' : 'reviews';
+
+        if (! in_array($path, PathType::reviewable())) {
+            return back()->withErrors([
+                'video' => 'Invalid path type.',
+            ]);
+        }
+
+        $pathTo = $path === PathType::REVIEW->value ? PathType::APPROVED->value : PathType::REVIEW->value;
 
         $videoPath = storage_path("app/public/{$path}/{$title}.mp4");
         $pointPath = storage_path("app/public/{$pathTo}/{$title}.mp4");
@@ -83,9 +70,7 @@ class ReviewController extends Controller
             ]);
         }
 
-        $redirectTo = $path === 'reviews' ? 'reviews.index' : 'reviews.approved';
-
-        return to_route($redirectTo);
+        return redirect(route('list-view.index', ['path' => $pathTo]));
     }
 
     public function update(Request $request)
@@ -118,6 +103,6 @@ class ReviewController extends Controller
             ]);
         }
 
-        return to_route('reviews.index');
+        return redirect(route('list-view.index', ['path' => PathType::REVIEW->value]));
     }
 }

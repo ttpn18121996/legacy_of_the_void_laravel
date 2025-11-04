@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@use('App\Enums\PathType')
+
 @section('title', $title)
 
 @push('styles')
@@ -18,15 +20,17 @@
             </div>
         </div>
         <div class="video__actions space-x-2">
-            <form action="{{ route('reviews.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="title" value="{{ $title }}">
-                <input type="hidden" name="path" value="{{ $path }}">
-                <button class="{{ $path === 'reviews' ? 'video__actions--success' : 'video__actions--warning' }}">
-                    {{ $path === 'reviews' ? 'Aprove' : 'Reject' }}
-                </button>
-            </form>
-            @if ($path === 'approved')
+            @if (in_array($path, PathType::reviewable()))
+                <form action="{{ route('list-view.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="title" value="{{ $title }}">
+                    <input type="hidden" name="path" value="{{ $path }}">
+                    <button class="{{ $path === PathType::REVIEW->value ? 'video__actions--success' : 'video__actions--warning' }}">
+                        {{ $path === PathType::REVIEW->value ? 'Aprove' : 'Reject' }}
+                    </button>
+                </form>
+            @endif
+            @if ($path === PathType::APPROVED->value)
                 <button class="video__actions--info" id="publish-video" type="submit">
                     Publish
                 </button>
@@ -43,9 +47,9 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('static/js/review-watch.js?v='.time()) }}"></script>
+    <script src="{{ asset('static/js/list-view-watch.js?v='.time()) }}"></script>
     <script>
-        reviewWatch({
+        listViewWatch({
             publishUrl: "{{ route('reviews.update') }}",
             videoTitle: "{!! $title !!}",
         });

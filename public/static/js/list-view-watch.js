@@ -1,6 +1,6 @@
 'use strict';
 
-const reviewWatch = function (setting = {}) {
+const listViewWatch = function (setting = {}) {
   const { publishUrl } = setting;
   const videoTitle = setting.videoTitle;
 

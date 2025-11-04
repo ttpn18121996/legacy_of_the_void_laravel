@@ -5,8 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GlobalSeachController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ListViewController;
 use App\Http\Controllers\OptionController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,12 +34,16 @@ Route::group([
     Route::post('/videos/increment-like', [VideoController::class, 'incrementLike'])->name('videos.increment-like');
     Route::get('/videos/{id}', [VideoController::class, 'show'])->name('videos.show');
 
-    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
-    Route::get('/approved', [ReviewController::class, 'approved'])->name('reviews.approved');
-    Route::get('/watch', [ReviewController::class, 'show'])->name('reviews.show');
-    Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-    Route::put('/publish-video', [ReviewController::class, 'update'])->name('reviews.update');
-    Route::delete('/reject', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::group([
+        'as' => 'list-view.',
+        'prefix' => 'list-view',
+    ], function () {
+        Route::get('/', [ListViewController::class, 'index'])->name('index');
+        Route::get('/watch', [ListViewController::class, 'show'])->name('show');
+        Route::post('/', [ListViewController::class, 'store'])->name('store');
+        Route::put('/publish-video', [ListViewController::class, 'update'])->name('update');
+        Route::delete('/reject', [ListViewController::class, 'destroy'])->name('destroy');
+    });
 
     Route::get('/options/actresses', [OptionController::class, 'getActresses'])->name('options.get-actresses');
     Route::get('/options/tags', [OptionController::class, 'getTags'])->name('options.get-tags');
