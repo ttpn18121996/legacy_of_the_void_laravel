@@ -346,7 +346,12 @@ body {
     color: var(--danger);
 }
 
-.form-input input {
+.form-input input[type="text"],
+.form-input input[type="search"],
+.form-input input[type="email"],
+.form-input input[type="password"],
+.form-input select,
+.form-input textarea {
     padding: .75rem 1rem;
     border-radius: .25rem;
     border: 1px solid #ccc;
@@ -370,6 +375,16 @@ body {
     transform: translateY(-50%);
     cursor: pointer;
     color: #64748b;
+}
+
+.form-input__checkbox {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.form-input__checkbox-item {
+    width: 50%;
 }
 
 .form-button {
@@ -431,4 +446,16 @@ body {
 
 .dialog__footer * + * {
     margin-left: .5rem;
+}
+
+@media screen and (min-width: 640px) {
+    .form-input__checkbox-item {
+        width: 25%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .form-input__checkbox-item {
+        width: 16.666666%;
+    }
 }

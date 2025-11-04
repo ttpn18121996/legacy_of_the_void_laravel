@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@use('App\Enums\PathType')
+@use('App\Enums\SearchType')
+
 @section('title', 'Home')
 
 @section('content')
@@ -20,7 +23,7 @@
                         </div>
                     </div>
                     <div class="card__body">
-                        <a href="{{ route('reviews.index') }}">More information</a>
+                        <a href="{{ route('list-view.index', ['path' => PathType::REVIEW->value]) }}">More information</a>
                     </div>
                 </div>
             </div>
@@ -38,7 +41,7 @@
                         </div>
                     </div>
                     <div class="card__body">
-                        <a href="{{ route('reviews.approved') }}">More information</a>
+                        <a href="{{ route('list-view.index', ['path' => PathType::APPROVED->value]) }}">More information</a>
                     </div>
                 </div>
             </div>
@@ -63,26 +66,50 @@
         </div>
     </div>
     <div class="main__body">
-        <h3 class="my-4">Categories</h3>
-        <div class="data--grid">
-            @foreach($categories as $category)
-                <div class="data__item--grid">
-                    <a class="data__link--grid" href="{{ route('categories.show', ['slug' => $category->slug]) }}">
-                        {{ $category->title }}
-                    </a>
+        <h3 class="my-4">Filter</h3>
+        <form action="">
+            <div class="card">
+                <div class="card__body">
+                    <div class="form-input">
+                        <label>Keyword</label>
+                        <div class="form-input__group">
+                            <input id="keyword" type="text" name="keyword" placeholder="Actress name or Video title" />
+                        </div>
+                    </div>
+                    <div class="form-input">
+                        <label>Search type</label>
+                        <div class="form-input__group">
+                            <select name="search_type">
+                                @foreach (SearchType::cases() as $type)
+                                    <option value="{{ $type->value }}" {{ request('search_type') == $type->value ? 'selected' : '' }}>
+                                        {{ $type->label() }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-input">
+                        <label>Tags</label>
+                        <div class="form-input__checkbox">
+                            @foreach($tags as $tag)
+                                <div class="form-input__checkbox-item">
+                                    <input
+                                        id="tag-{{ $tag->id }}"
+                                        type="checkbox"
+                                        name="tags[]"
+                                        value="{{ $tag->id }}"
+                                        {{ in_array($tag->id, request()->input('tags', [])) ? 'checked' : '' }}
+                                    />
+                                    <label for="tag-{{ $tag->id }}">{{ $tag->title }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="form-button">
+                        <button type="submit" class="btn btn--primary">Search</button>
+                    </div>
                 </div>
-            @endforeach
-        </div>
-
-        <h3 class="my-4">Tags</h3>
-        <div class="data--grid">
-            @foreach($tags as $tag)
-                <div class="data__item--grid">
-                    <a class="data__link--grid" href="{{ get_filter_tag_url($tag->slug) }}">
-                        &#35;{{ $tag->title }}
-                    </a>
-                </div>
-            @endforeach
-        </div>
+            </div>
+        </form>
     </div>
 @endsection
