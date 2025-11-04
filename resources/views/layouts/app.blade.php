@@ -33,6 +33,7 @@
     <script src="{{ asset('static/js/global-search.js?v='.time()) }}"></script>
     <script>
         lotv.init();
+        lotv.useScrollToTop();
         globalSearch.init();
     </script>
     @stack('scripts')
