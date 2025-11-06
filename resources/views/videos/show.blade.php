@@ -3,6 +3,7 @@
 @section('title', 'Watch')
 
 @push('styles')
+    <link rel="stylesheet" href="{{ asset('static/css/videos-index.css') }}">
     <link rel="stylesheet" href="{{ asset('static/css/videos-show.css?v='.time()) }}">
     <link rel="stylesheet" href="{{ asset('static/css/modal.css?v='.time()) }}">
 @endpush
@@ -82,6 +83,16 @@
                 </div>
             </div>
         </div>
+
+        <hr class="my-4" />
+
+        <h2 class="section__title--large">Related Videos</h2>
+        <div class="data--grid">
+            @forelse($relatedVideos as $relatedVideo)
+                <x-video-item :video="$relatedVideo" />
+            @empty
+            @endforelse
+        </div>
     </div>
 @endsection
 
@@ -124,6 +135,7 @@
 @push('scripts')
     <script src="{{ asset('static/js/videos-show.js?v='.time()) }}"></script>
     <script>
+        lotv.dispatchVideoThumbnail();
         videosShow({
             updateActressesUrl: "{{ route('videos.update-actresses') }}",
             updateCategoriesUrl: "{{ route('videos.update-categories') }}",

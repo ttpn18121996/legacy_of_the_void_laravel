@@ -177,4 +177,34 @@ class VideoService
             return false;
         }
     }
+
+    public function getRelatedVideos(Video $video, int $limit = 10)
+    {
+        $actressIds = $video->actresses->pluck('id')->toArray();
+        $tagIds = $video->tags->pluck('id')->toArray();
+
+        $relatedVideosWithTags = Video::whereHas('tags', function ($query) use ($tagIds) {
+                $query->whereIn('tags.id', $tagIds);
+            })
+            ->where('id', '!=', $video->id)
+            ->with(['thumbnails'])
+            ->distinct()
+            ->inRandomOrder()
+            ->limit($limit)
+            ->get();
+
+        $relatedVideos = Video::whereHas('actresses', function ($query) use ($actressIds) {
+                $query->whereIn('actresses.id', $actressIds);
+            })
+            ->where('id', '!=', $video->id)
+            ->with(['thumbnails'])
+            ->distinct()
+            ->inRandomOrder()
+            ->get()
+            ->merge($relatedVideosWithTags)
+            ->unique('id')
+            ->take($limit);
+
+        return $relatedVideos;
+    }
 }

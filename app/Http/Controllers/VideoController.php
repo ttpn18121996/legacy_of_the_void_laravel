@@ -36,10 +36,13 @@ class VideoController extends Controller
             ->toArray();
         $selectedCategories = $video->categories->pluck('id')->toArray();
 
+        $relatedVideos = $this->videoService->getRelatedVideos($video);
+
         return view('videos.show', [
             'video' => $video,
             'categories' => $categories,
             'selectedCategories' => $selectedCategories,
+            'relatedVideos' => $relatedVideos,
         ]);
     }
 
