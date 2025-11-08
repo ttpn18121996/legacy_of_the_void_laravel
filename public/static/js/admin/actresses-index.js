@@ -2,7 +2,7 @@
 
 const actressesIndex = function () {
   const btnDeleteActresses = document.querySelectorAll('#actresses-table .btn-delete');
-  const btnUpdateThumbnail = document.querySelectorAll('#actresses-table .btn-update-thumbnail');
+  const btnUpdateThumbnails = document.querySelectorAll('#actresses-table .btn-update-thumbnail');
 
   for (const btnDeleteActress of btnDeleteActresses) {
     btnDeleteActress.addEventListener('click', e => {
@@ -31,6 +31,23 @@ const actressesIndex = function () {
         },
       });
       dialog.show();
+    });
+  }
+
+  for (const btnUpdateThumbnail of btnUpdateThumbnails) {
+    btnUpdateThumbnail.addEventListener('click', e => {
+      e.preventDefault();
+      const url = btnUpdateThumbnail.dataset.url;
+
+      lotv.ajax({
+        method: 'PATCH',
+        url,
+        success: res => {
+          if (res?.success) {
+            window.location.reload();
+          }
+        },
+      });
     });
   }
 };
