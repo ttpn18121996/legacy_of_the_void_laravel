@@ -22,6 +22,32 @@ if (! function_exists('fill_input_to_sort')) {
     }
 }
 
+if (! function_exists('force_rmdir')) {
+    function force_rmdir(string $dir): bool
+    {
+        if (! is_dir($dir)) {
+            return false;
+        }
+
+        $files = glob($dir . '/*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                if (! force_rmdir($file)) {
+                    return false;
+                }
+            } elseif (! unlink($file)) {
+                return false;
+            }
+        }
+
+        if (! rmdir($dir)) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
 if (! function_exists('get_filter_tag_url')) {
     function get_filter_tag_url(string $tagSlug, bool $addTag = true): string
     {

@@ -117,6 +117,7 @@ class VideoService
     {
         $videoPath = storage_path("app/public/{$from}/{$title}.mp4");
         $pointPath = storage_path("app/public/trash/{$title}.mp4");
+        $thumbnailPath = storage_path("app/public/thumbnails/{$title}");
 
         if (! file_exists($videoPath)) {
             FacadesLog::error("Video not found: {$videoPath}");
@@ -128,6 +129,14 @@ class VideoService
             Log::error("Failed to move video: {$videoPath}");
 
             return false;
+        }
+
+        if (file_exists($thumbnailPath)) {
+            if (! force_rmdir($thumbnailPath)) {
+                Log::error("Failed to move thumbnail: {$thumbnailPath}");
+
+                return false;
+            }
         }
 
         return true;
