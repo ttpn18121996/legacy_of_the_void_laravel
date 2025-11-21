@@ -197,7 +197,7 @@ body {
 
 .btn--secondary {
     background-color: var(--slate-300);
-    color: var(--dark);
+    color: var(--dark) !important;
 }
 
 .btn--secondary:hover {

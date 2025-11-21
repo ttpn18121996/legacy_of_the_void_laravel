@@ -33,7 +33,8 @@
     margin: 1rem 0;
 }
 
-.video__actions button {
+.video__actions button,
+.video__actions a {
     width: 100px;
     height: 2.5rem;
     border-radius: .25rem;
