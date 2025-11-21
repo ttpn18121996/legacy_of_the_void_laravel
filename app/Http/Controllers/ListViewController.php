@@ -13,6 +13,9 @@ class ListViewController extends Controller
         protected VideoService $videoService,
     ) {}
 
+    /**
+     * Display a listing of videos based on the specified path.
+     */
     public function index(Request $request)
     {
         $path = $request->query('path', PathType::REVIEW->value);
@@ -35,6 +38,9 @@ class ListViewController extends Controller
         ]);
     }
 
+    /**
+     * Display a specific video for review.
+     */
     public function show(Request $request)
     {
         return view('list-view.watch', [
@@ -43,6 +49,9 @@ class ListViewController extends Controller
         ]);
     }
 
+    /**
+     * Handle approving or rejecting a video.
+     */
     public function store(Request $request)
     {
         $title = $request->input('title');
@@ -71,9 +80,12 @@ class ListViewController extends Controller
             ]);
         }
 
-        return redirect(route('list-view.index', ['path' => $pathTo]));
+        return redirect(route('list-view.index', ['path' => $path]));
     }
 
+    /**
+     * Handle publishing a video.
+     */
     public function update(Request $request)
     {
         $title = $request->input('title');
@@ -94,6 +106,9 @@ class ListViewController extends Controller
         ], 500);
     }
 
+    /**
+     * Handle deleting a video. Move to trash.
+     */
     public function destroy(Request $request)
     {
         $result = $this->videoService->moveToTrash($request->query('title'), $request->query('path'));
