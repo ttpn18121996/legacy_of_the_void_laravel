@@ -44,7 +44,7 @@ const globalSearch = {
         const item = document.createElement('a');
         item.classList.add('form-search__suggestion-item');
         item.href = `/actresses/${actress.id}`;
-        item.textContent = actress.name + (actress.another_name ? ` (${actress.another_name})` : '');
+        item.textContent = actress.name + (actress.name !==actress.another_name ? ` (${actress.another_name})` : '');
         actressItems.appendChild(item);
       });
       
