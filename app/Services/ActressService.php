@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Actress;
 use App\Models\Tag;
+use App\Models\Video;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
@@ -13,7 +14,7 @@ use RuntimeException;
 class ActressService
 {
     public function __construct(
-        private Actress $actress,
+        protected Actress $actress,
     ) {}
 
     public function paginate(array $filters = [])
@@ -106,16 +107,22 @@ class ActressService
         return true;
     }
 
-    public function getOptions()
+    public function getOptions(?Video $video = null): array
     {
+        $selectedIds = [];
+
+        if ($video) {
+            $selectedIds = $video->actresses->pluck('id')->toArray();
+        }
+
         return $this->actress->orderBy('name')->get()
             ->map(fn ($actress) => [
                 'value' => $actress->id,
                 'label' => $actress->name != $actress->another_name
                     ? "{$actress->name} ({$actress->another_name})"
                     : $actress->name,
-                'selected' => false,
-                ])
+                'selected' => in_array($actress->id, $selectedIds),
+            ])
             ->toArray();
     }
 

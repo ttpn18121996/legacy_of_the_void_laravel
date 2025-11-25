@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Video;
+use App\Services\ActressService;
+use App\Services\TagService;
 use App\Services\VideoService;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
     public function __construct(
-        private VideoService $videoService,
+        protected ActressService $actressService,
+        protected TagService $tagService,
+        protected VideoService $videoService,
     ) {}
 
     public function index(Request $request)
@@ -36,12 +40,28 @@ class VideoController extends Controller
             ->toArray();
         $selectedCategories = $video->categories->pluck('id')->toArray();
 
+        $actresses = $this->actressService->getOptions($video);
+        $selectedActresses = collect($actresses)->filter(fn ($actress) => $actress['selected'])
+            ->map(fn ($actress) => $actress['value'])
+            ->values()
+            ->toArray();
+
+        $tags = $this->tagService->getOptions($video);
+        $selectedTags = collect($tags)->filter(fn ($tag) => $tag['selected'])
+            ->map(fn ($tag) => $tag['value'])
+            ->values()
+            ->toArray();
+
         $relatedVideos = $this->videoService->getRelatedVideos($video);
 
         return view('videos.show', [
             'video' => $video,
+            'actresses' => $actresses,
             'categories' => $categories,
+            'tags' => $tags,
+            'selectedActresses' => $selectedActresses,
             'selectedCategories' => $selectedCategories,
+            'selectedTags' => $selectedTags,
             'relatedVideos' => $relatedVideos,
         ]);
     }

@@ -129,15 +129,11 @@ const videosShow = function (setting = {}) {
       });
     }
 
-    document.querySelectorAll('.toggle-modal').forEach(btn => {
-      const target = btn.dataset.target;
-      if (target === '#actresses-modal') {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          loadActressesOptions();
-        });
-      }
-    });
+    document.getElementById('refresh-actresses')
+      .addEventListener('click', e => {
+        e.preventDefault();
+        loadActressesOptions();
+      });
   }
 
   if (getTagsOptionsUrl) {
@@ -168,15 +164,11 @@ const videosShow = function (setting = {}) {
       });
     }
 
-    document.querySelectorAll('.toggle-modal').forEach(btn => {
-      const target = btn.dataset.target;
-      if (target === '#tags-modal') {
-        btn.addEventListener('click', e => {
-          e.preventDefault();
-          loadTagsOptions();
-        });
-      }
-    });
+    document.getElementById('refresh-tags')
+      .addEventListener('click', e => {
+        e.preventDefault();
+        loadTagsOptions();
+      });
   }
 
   if (incrementLikeUrl) {

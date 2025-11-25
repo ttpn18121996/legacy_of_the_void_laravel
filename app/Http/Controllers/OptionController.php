@@ -10,50 +10,40 @@ use Illuminate\Http\Request;
 class OptionController extends Controller
 {
     public function __construct(
-        private ActressService $actressService,
-        private VideoService $videoService,
-        private TagService $tagService,
+        protected ActressService $actressService,
+        protected VideoService $videoService,
+        protected TagService $tagService,
     ) {}
 
     public function getActresses(Request $request)
     {
-        $options = $this->actressService->getOptions();
         $videoId = $request->query('video_id');
+        $video = null;
 
         if ($videoId) {
             $video = $this->videoService->find($videoId);
-            $selected = $video->actresses->pluck('id')->toArray();
-            foreach ($options as $key => $option) {
-                if (in_array($option['value'], $selected)) {
-                    $options[$key]['selected'] = true;
-                }
-            }
         }
+
+        $options = $this->actressService->getOptions($video);
 
         return response()->json([
             'options' => $options,
-            'selected' => $selected,
         ]);
     }
 
     public function getTags(Request $request)
     {
-        $options = $this->tagService->getOptions();
         $videoId = $request->query('video_id');
-
+        $video = null;
+        
         if ($videoId) {
             $video = $this->videoService->find($videoId);
-            $selected = $video->tags->pluck('id')->toArray();
-            foreach ($options as $key => $option) {
-                if (in_array($option['value'], $selected)) {
-                    $options[$key]['selected'] = true;
-                }
-            }
         }
+
+        $options = $this->tagService->getOptions($video);
 
         return response()->json([
             'options' => $options,
-            'selected' => $selected,
         ]);
     }
 }

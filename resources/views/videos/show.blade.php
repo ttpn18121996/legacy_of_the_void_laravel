@@ -101,10 +101,11 @@
     <div id="actresses-modal">
         <x-modal title="Actresses">
             <x-slot name="body">
-                <x-selection-list name="actresses" />
+                <x-selection-list name="actresses" :items="$actresses" :selected-items="$selectedActresses" />
             </x-slot>
 
             <x-slot name="footer">
+                <button class="btn btn--secondary" id="refresh-actresses">Refresh</button>
                 <button class="btn btn--primary" id="update-actresses">Save</button>
             </x-slot>
         </x-modal>
@@ -123,10 +124,11 @@
     <div id="tags-modal">
         <x-modal title="Tags">
             <x-slot name="body">
-                <x-selection-list name="tags" />
+                <x-selection-list name="tags" :items="$tags" :selected-items="$selectedTags" />
             </x-slot>
 
             <x-slot name="footer">
+                <button class="btn btn--secondary" id="refresh-tags">Refresh</button>
                 <button class="btn btn--primary" id="update-tags">Save</button>
             </x-slot>
         </x-modal>

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Tag;
+use App\Models\Video;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -64,11 +65,21 @@ class TagService
         return true;
     }
 
-    public function getOptions()
+    public function getOptions(?Video $video = null): array
     {
+        $selectedIds = [];
+
+        if ($video) {
+            $selectedIds = $video->tags->pluck('id')->toArray();
+        }
+
         return $this->tag
             ->orderBy('title')->get()
-            ->map(fn ($tag) => ['value' => $tag->id, 'label' => "#{$tag->title}"])
+            ->map(fn ($tag) => [
+                'value' => $tag->id,
+                'label' => "#{$tag->title}",
+                'selected' => in_array($tag->id, $selectedIds),
+            ])
             ->toArray();
     }
 
