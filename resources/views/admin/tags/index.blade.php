@@ -25,7 +25,7 @@
             </form>
         </div>
 
-        <table class="table hide-on-mobile" id="tags-table">
+        <table class="table" id="tags-table">
             <thead>
                 <tr>
                     <th>ID</th>

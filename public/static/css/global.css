@@ -169,11 +169,11 @@ body {
 .btn--sm {
     border-radius: 0.25rem;
     border: none;
-    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    line-height: 1.5;
 }
 
 .btn {
