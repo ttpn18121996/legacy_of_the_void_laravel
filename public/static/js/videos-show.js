@@ -128,7 +128,7 @@ const videosShow = function (setting = {}) {
         },
       });
     }
-    loadActressesOptions();
+
     document.querySelectorAll('.toggle-modal').forEach(btn => {
       const target = btn.dataset.target;
       if (target === '#actresses-modal') {
@@ -167,7 +167,7 @@ const videosShow = function (setting = {}) {
         },
       });
     }
-    loadTagsOptions();
+
     document.querySelectorAll('.toggle-modal').forEach(btn => {
       const target = btn.dataset.target;
       if (target === '#tags-modal') {
