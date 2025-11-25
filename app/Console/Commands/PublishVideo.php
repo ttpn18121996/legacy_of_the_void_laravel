@@ -129,8 +129,6 @@ class PublishVideo extends Command
                     ])
                     ->toArray());
 
-                $tags = [];
-
                 $actressNames = Str::of($videoNameWithoutExt)
                     ->before(' - ')
                     ->explode(',')
@@ -138,13 +136,7 @@ class PublishVideo extends Command
                     ->filter()
                     ->toArray();
 
-                if (count($actressNames) === 2) {
-                    $tags[] = Tag::where('title', 'threesome')->first()?->id;
-                } elseif (count($actressNames) === 3) {
-                    $tags[] = Tag::where('title', 'foursome')->first()?->id;
-                } elseif (count($actressNames) > 3) {
-                    $tags[] = Tag::where('title', 'gangbang')->first()?->id;
-                }
+                $tags = $this->getTagsForSome(count($actressNames));
 
                 $actresses = Actress::whereIn('name', $actressNames)->with(['tags'])->get();
                 $videoModel->actresses()->attach($actresses->pluck('id')->toArray());
@@ -166,5 +158,26 @@ class PublishVideo extends Command
         }
 
         $this->info('Videos published.');
+    }
+
+    protected function getTagsForSome(int $countActresses): array
+    {
+        $tags = [];
+
+        if ($countActresses < 2) {
+            return $tags;
+        }
+
+        $tags[] = Tag::where('title', 'fff-plus')->first()?->id;
+
+        if ($countActresses === 2) {
+            $tags[] = Tag::where('title', 'threesome')->first()?->id;
+        } elseif ($countActresses === 3) {
+            $tags[] = Tag::where('title', 'foursome')->first()?->id;
+        } elseif ($countActresses > 3) {
+            $tags[] = Tag::where('title', 'gangbang')->first()?->id;
+        }
+
+        return $tags;
     }
 }
