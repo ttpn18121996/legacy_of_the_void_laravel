@@ -60,12 +60,14 @@
     align-items: center;
 }
 
-.video-card__detail div.hd {
-    background-color: var(--danger);
+.video-card__detail--likes {
+    background-color: var(--info);
     color: var(--light);
     border-radius: .25rem;
     padding: .125rem .5rem;
     font-size: .75rem;
+    display: flex;
+    align-items: center;
 }
 
 .filtered-tags {
