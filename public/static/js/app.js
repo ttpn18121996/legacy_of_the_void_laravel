@@ -380,6 +380,18 @@ window.lotv = (function () {
     });
   }
 
+  function bindEvent(selector, event, callback) {
+    const elements = document.querySelectorAll(selector);
+
+    if (!elements) {
+      return;
+    }
+
+    for (const element of elements) {
+      element.addEventListener(event, callback);
+    }
+  }
+
   return {
     init,
     dispatchVideoThumbnail,
@@ -390,5 +402,6 @@ window.lotv = (function () {
     ajax,
     loader,
     toast,
+    bindEvent,
   };
 })();
