@@ -45,6 +45,7 @@ Route::group([
         Route::get('/', [VideoController::class, 'index'])->name('index');
         Route::get('/{id}/edit', [VideoController::class, 'edit'])->name('edit');
         Route::put('/{id}', [VideoController::class, 'update'])->name('update');
+        Route::patch('/{id}/sync-tags', [VideoController::class, 'syncTags'])->name('sync-tags');
         Route::delete('/{id}', [VideoController::class, 'destroy'])->name('destroy');
     });
 });

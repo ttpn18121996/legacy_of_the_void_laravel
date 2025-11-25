@@ -73,13 +73,11 @@ class VideoService
             'title' => $data['title'],
         ]);
 
-        if (isset($data['actresses'])) {
-            $video->actresses()->sync($data['actresses']);
-        }
-
-        if (isset($data['tags'])) {
-            $video->tags()->sync($data['tags']);
-        }
+        $actresses = Arr::get($data, 'actresses', []);
+        $video->actresses()->sync($actresses);
+        
+        $tags = Arr::get($data, 'tags', []);
+        $video->tags()->sync($tags);
 
         VideoThumbnail::where('video_id', $video->id)->get()->each(function ($thumbnail, $index) use ($data) {
             if (isset($data['default_thumbnail']) && $data['default_thumbnail'] == $index + 1) {
@@ -147,6 +145,20 @@ class VideoService
         $video = Video::find($videoId);
         $video->actresses()->sync($actresses);
 
+        $tags = Actress::whereIn('id', $actresses)->with(['tags'])
+            ->get()
+            ->flatMap(function ($actress) {
+                return $actress->tags->pluck('id');
+            })
+            ->merge($video->tags->pluck('id'))
+            ->unique()
+            ->toArray();
+
+        $this->syncTagsByActress($video, $actresses);
+    }
+
+    public function syncTagsByActress(Video $video, array $actresses): void
+    {
         $tags = Actress::whereIn('id', $actresses)->with(['tags'])
             ->get()
             ->flatMap(function ($actress) {

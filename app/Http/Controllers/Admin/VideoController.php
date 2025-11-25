@@ -62,6 +62,16 @@ class VideoController extends Controller
         return redirect()->route('admin.videos.index')->with('success', "Video '{$video->title}' updated successfully.");
     }
 
+    public function syncTags(string $id)
+    {
+        $video = $this->videoService->find($id);
+        $actresses = $video->actresses;
+
+        $this->videoService->syncTagsByActress($video, $actresses->pluck('id')->toArray());
+
+        return response()->json(['success' => true]);
+    }
+
     public function destroy(string $id)
     {
         $this->videoService->delete($id);

@@ -25,7 +25,7 @@
                     <th>Title</th>
                     <th>Duration</th>
                     <th>Dimensions</th>
-                    <th></th>
+                    <th width="250"></th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +73,13 @@
                         <td>
                             <div class="table__actions space-x-2">
                                 <a href="{{ route('admin.videos.edit', ['id' => $video->id]) }}" class="btn--sm btn--primary">Edit</a>
+                                <button
+                                    data-id="{{ $video->id }}"
+                                    data-url="{{ route('admin.videos.sync-tags', ['id' => $video->id]) }}"
+                                    class="btn--sm btn--info btn-sync-tags"
+                                >
+                                    Sync tags
+                                </button>
                                 <button
                                     data-id="{{ $video->id }}"
                                     data-url="{{ route('admin.videos.destroy', ['id' => $video->id]) }}"
