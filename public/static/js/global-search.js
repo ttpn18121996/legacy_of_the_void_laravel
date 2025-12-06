@@ -111,8 +111,9 @@ const globalSearch = {
     return group;
   },
 
-  handleQuickSearch: searchValue => {
+  handleQuickSearch: keyword => {
     const items = document.querySelectorAll('.quick-search-item');
+    const searchValue = keyword.toLowerCase();
 
     items.forEach(item => {
       const title = item.dataset.title.toLowerCase();
