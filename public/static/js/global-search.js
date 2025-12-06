@@ -20,6 +20,8 @@ const globalSearch = {
           return;
         }
 
+        globalSearch.handleQuickSearch(q);
+
         lotv.ajax({
           url: '/global-search?q=' + encodeURIComponent(q),
           success: res => {
@@ -34,6 +36,10 @@ const globalSearch = {
     const formSearch = document.getElementById('form-search');
     const suggestion = document.createElement('div');
     suggestion.classList.add('form-search__suggestion');
+
+    lotv.bindEvent(suggestion, 'clickOutside', () => {
+      suggestion.remove();
+    });
 
     if (data?.actresses?.length) {
       const actressGroup = globalSearch.createGroup('Actresses');
@@ -103,5 +109,18 @@ const globalSearch = {
     group.appendChild(groupTitle);
 
     return group;
-  }
+  },
+
+  handleQuickSearch: searchValue => {
+    const items = document.querySelectorAll('.quick-search-item');
+
+    items.forEach(item => {
+      const title = item.dataset.title.toLowerCase();
+      if (searchValue.length === 0 || title.includes(searchValue) || (searchValue === '#some' && title.includes(', '))) {
+        item.style.display = 'flex';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  },
 };

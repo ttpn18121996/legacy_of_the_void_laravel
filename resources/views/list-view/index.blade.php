@@ -6,13 +6,7 @@
 
 @section('content')
     <div class="main__header">
-        <div class="filter-wrapper space-y-4">
-            <div class="form-search" id="list-view-search">
-                <div class="form-search__box">
-                    <input type="search" name="q" placeholder="Search..." />
-                </div>
-            </div>
-        </div>
+        <x-search-form :filteredTags="$filteredTags" />
         @error('video')
             <div class="alert alert-error">{{ $message }}</div>
         @enderror
@@ -20,7 +14,7 @@
     <div class="main__body">
         <div class="data--list">
             @foreach($videos as $index => $video)
-                <div class="data__item--list" data-title="{{ $video->title }}">
+                <div class="data__item--list quick-search-item" data-title="{{ $video->title }}">
                     <a class="data__item--link" href="{{  route('list-view.show', ['title' => $video->title, 'path' => $video->path]) }}">
                         #{{ $index + 1 }} - {{ $video->title }}
                     </a>
@@ -42,9 +36,7 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('static/js/list-view-index.js?v='.time()) }}"></script>
     <script>
-        listViewIndex();
         lotv.useScrollToTop();
     </script>
 @endpush

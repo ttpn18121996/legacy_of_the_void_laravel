@@ -381,15 +381,36 @@ window.lotv = (function () {
   }
 
   function bindEvent(selector, event, callback) {
-    const elements = document.querySelectorAll(selector);
+    let elements;
+
+    if (selector instanceof HTMLElement) {
+      elements = [selector];
+    } else if (typeof selector === 'string') {
+      selector = selector.trim();
+      elements = document.querySelectorAll(selector);
+    }
 
     if (!elements) {
       return;
     }
 
     for (const element of elements) {
-      element.addEventListener(event, callback);
+      if (event === 'clickOutside') {
+        handleClickOutside(element, callback);
+      } else {
+        element.addEventListener(event, callback);
+      }
     }
+  }
+
+  function handleClickOutside(element, callback) {
+    function onClick(event) {
+      if (!element.contains(event.target)) {
+        callback();
+        document.removeEventListener("click", onClick);
+      }
+    }
+    document.addEventListener('click', onClick);
   }
 
   return {
