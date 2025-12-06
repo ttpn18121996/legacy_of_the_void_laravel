@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ViewMode;
 use App\Http\Controllers\Controller;
 use App\Models\Tag;
 use App\Services\ActressService;
@@ -22,6 +23,7 @@ class ActressController extends Controller
 
         return view('admin.actresses.index', [
             'actresses' => $actresses,
+            'viewMode' => $request->query('view_mode', ViewMode::TABLE->value),
         ]);
     }
 
