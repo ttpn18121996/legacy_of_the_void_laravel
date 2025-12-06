@@ -24,7 +24,7 @@
                 href="{{ route('admin.actresses.index', ['view_mode' => $viewMode === ViewMode::GRID->value ? ViewMode::TABLE->value : ViewMode::GRID->value]) }}"
                 class="btn btn--secondary"
             >
-                {{ $viewMode === ViewMode::GRID->value ? 'Table view' : 'Grid view' }}
+                {!! ViewMode::display($viewMode === ViewMode::GRID->value ? ViewMode::TABLE : ViewMode::GRID) !!}
             </a>
             <a href="{{ route('admin.actresses.create') }}" class="btn btn--primary">Add new</a>
         </div>
