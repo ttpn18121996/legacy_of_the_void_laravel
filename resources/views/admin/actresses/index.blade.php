@@ -29,7 +29,7 @@
             <a href="{{ route('admin.actresses.create') }}" class="btn btn--primary">Add new</a>
         </div>
 
-        @if($viewMode === ViewMode::GRID->value)
+        @if ($viewMode === ViewMode::GRID->value)
             <div class="data--grid">
                 @forelse($actresses as $actress)
                     <x-actress-item :actress="$actress" />
