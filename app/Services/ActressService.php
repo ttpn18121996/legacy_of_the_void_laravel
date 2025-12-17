@@ -100,6 +100,11 @@ class ActressService
     public function delete(int $id): bool
     {
         $actress = $this->find($id);
+
+        if (file_exists(storage_path('app/public/' . $actress->getPath()))) {
+            unlink(storage_path('app/public/' . $actress->getPath()));
+        }
+
         $actress->tags()->detach();
         $actress->videos()->detach();
         $actress->delete();
