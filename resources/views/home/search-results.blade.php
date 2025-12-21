@@ -29,7 +29,7 @@
                 @endforelse
             </div>
 
-            {{ $results->links('vendor.pagination') }}
+            <x-pagination :data="$results" />
         @endif
     </div>
 @endsection

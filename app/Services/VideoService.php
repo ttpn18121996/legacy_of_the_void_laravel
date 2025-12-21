@@ -51,11 +51,9 @@ class VideoService
             $builder->latest();
         }
 
-        $videos = $builder->paginate(20)
+        return $builder->paginate(20)
             ->onEachSide(2)
             ->withQueryString();
-
-        return $videos;
     }
 
     public function find(string $id): Video

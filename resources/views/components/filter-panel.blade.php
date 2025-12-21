@@ -7,8 +7,7 @@
 
 @use('App\Enums\SearchType')
 
-<form action="" method="POST">
-    @csrf
+<form action="{{ route('search') }}" method="GET">
     <div class="card">
         <div class="card__body">
             <div class="form-input">

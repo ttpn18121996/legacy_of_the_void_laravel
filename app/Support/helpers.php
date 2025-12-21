@@ -6,7 +6,7 @@ if (! function_exists('fill_input_to_sort')) {
     function fill_input_to_sort(): string
     {
         $html = '';
-        $query = Arr::except(request()->query(), ['sort_by', 'destination', 'page']);
+        $query = Arr::except(request()->query(), ['sort_by', 'destination', 'page', 'q']);
 
         foreach ($query as $key => $value) {
             if (is_array($value)) {

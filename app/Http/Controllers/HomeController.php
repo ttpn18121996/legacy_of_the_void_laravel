@@ -61,9 +61,9 @@ class HomeController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->input('keyword');
-        $searchType = $request->input('search_type') === SearchType::ACTRESS->value ? SearchType::ACTRESS->value : SearchType::VIDEO->value;
-        $selectedTags = $request->input('tags', []);
+        $keyword = $request->query('keyword');
+        $searchType = $request->query('search_type') === SearchType::ACTRESS->value ? SearchType::ACTRESS->value : SearchType::VIDEO->value;
+        $selectedTags = $request->query('tags', []);
 
         if (empty($keyword) && empty($selectedTags)) {
             return redirect()->route('home');

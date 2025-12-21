@@ -4,11 +4,15 @@ namespace App\Services;
 
 use App\Models\Tag;
 use App\Models\Video;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class TagService
 {
+    private const TAG_OPTIONS_CACHE_KEY = 'tag_options';
+
     public function __construct(
         protected Tag $tag,
     ) {}
@@ -37,6 +41,8 @@ class TagService
         $tag->title = $title;
         $tag->slug = Str::slug($title);
         $tag->save();
+
+        $this->checkAndUpdateCache();
         
         return true;
     }
@@ -62,25 +68,43 @@ class TagService
         $tag->actresses()->detach();
         $tag->delete();
 
+        $this->checkAndUpdateCache();
+
         return true;
+    }
+
+    protected function checkAndUpdateCache(): void
+    {
+        Cache::forget(static::TAG_OPTIONS_CACHE_KEY);
+        Cache::rememberForever(static::TAG_OPTIONS_CACHE_KEY, function () {
+            return $this->tag->orderBy('title')->get();
+        });
     }
 
     public function getOptions(?Video $video = null): array
     {
         $selectedIds = [];
 
+        $tags = $this->getOptionsInCache();
+
         if ($video) {
             $selectedIds = $video->tags->pluck('id')->toArray();
         }
 
-        return $this->tag
-            ->orderBy('title')->get()
+        return $tags
             ->map(fn ($tag) => [
                 'value' => $tag->id,
                 'label' => "#{$tag->title}",
                 'selected' => in_array($tag->id, $selectedIds),
             ])
             ->toArray();
+    }
+
+    protected function getOptionsInCache(): Collection
+    {
+        return Cache::rememberForever(static::TAG_OPTIONS_CACHE_KEY, function () {
+            return $this->tag->orderBy('title')->get();
+        });
     }
 
     public function search(string $keyword)
