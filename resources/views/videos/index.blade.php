@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="main__header">
-        <x-search-form :filteredTags="$filteredTags" />
+        <x-search-form :filteredTags="$filteredTags ?? []" />
     </div>
     <div class="main__body">
         <div class="data__controls">
@@ -47,7 +47,7 @@
             @endforelse
         </div>
 
-        {{ $videos->links('vendor.pagination') }}
+        <x-pagination :data="$videos" />
     </div>
 @endsection
 

@@ -228,4 +228,12 @@ class VideoService
 
         return $relatedVideos;
     }
+
+    public function getRandomVideos(int $limit = 5)
+    {
+        return Video::with(['thumbnails'])
+            ->inRandomOrder()
+            ->limit($limit)
+            ->get();
+    }
 }

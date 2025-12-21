@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="main__header">
-        <x-search-form :filteredTags="$filteredTags" />
+        <x-search-form :filteredTags="$filteredTags ?? []" />
         @error('video')
             <div class="alert alert-error">{{ $message }}</div>
         @enderror

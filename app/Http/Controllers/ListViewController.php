@@ -35,7 +35,6 @@ class ListViewController extends Controller
         return view('list-view.index', [
             'videos' => $videos,
             'title' => PathType::from($path)->value,
-            'filteredTags' => [],
         ]);
     }
 
