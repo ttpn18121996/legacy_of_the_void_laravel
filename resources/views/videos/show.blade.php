@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Watch')
+@section('title', $video->title)
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('static/css/videos-index.css') }}">
