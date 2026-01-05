@@ -17,9 +17,7 @@ class ActressController extends Controller
 
     public function index(Request $request)
     {
-        $q = $request->query('q');
-
-        $actresses = $this->actressService->paginate(['q' => $q]);
+        $actresses = $this->actressService->paginate($request->query());
 
         return view('admin.actresses.index', [
             'actresses' => $actresses,

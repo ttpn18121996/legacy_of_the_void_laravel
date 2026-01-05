@@ -21,6 +21,8 @@ class ActressService
     {
         $q = Arr::get($filters, 'q');
         $tagSlugs = Arr::get($filters, 'tags', []);
+        $sortMode = Arr::get($filters, 'sort_mode');
+        $sortBy = Arr::get($filters, 'sort_by');
         $actressIds = [];
 
         if ($q) {
@@ -34,18 +36,27 @@ class ActressService
                 $query->where('name', 'like', "%{$q}%")
                     ->orWhere('another_name', 'like', "%{$q}%")
                     ->orWhereIn('id', $actressIds);
-            })
-            ->when(count($tagSlugs), function ($query) use ($tagSlugs) {
+            });
+
+        if ($sortMode === 'without') {
+            if ($sortBy === 'thumbnail') {
+                $actresses->whereNull('thumbnail_path');
+            } elseif ($sortBy === 'tags') {
+                $actresses->whereDoesntHave('tags');
+            } elseif ($sortBy === 'videos') {
+                $actresses->whereDoesntHave('videos');
+            }
+        } else {
+            $actresses->when(count($tagSlugs), function ($query) use ($tagSlugs) {
                 $query->whereHas('tags', function ($query) use ($tagSlugs) {
                     $query->whereIn('slug', $tagSlugs);
                 }, '=', count($tagSlugs));
-            })
-            ->orderBy('name')
-            ->paginate(20)
+            })->orderBy('name');
+        }
+
+        return $actresses->paginate(20)
             ->onEachSide(2)
             ->withQueryString();
-
-        return $actresses;
     }
 
     public function create(array $data): bool

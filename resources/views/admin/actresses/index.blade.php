@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@use('App\Enums\ActressSort')
 @use('App\Enums\ViewMode')
 
 @section('title', 'Actress management')
@@ -27,6 +28,25 @@
                 {!! ViewMode::display($viewMode === ViewMode::GRID->value ? ViewMode::TABLE : ViewMode::GRID) !!}
             </a>
             <a href="{{ route('admin.actresses.create') }}" class="btn btn--primary">Add new</a>
+        </div>
+
+        <div class="data__controls">
+            <form action="" method="GET" class="space-x-4">
+                <input type="hidden" name="sort_mode" value="without" />
+                <input type="hidden" name="view_mode" value="{{ $viewMode }}" />
+                <div class="data__control-item space-x-2">
+                    <div>Without:</div>
+                    <select name="sort_by">
+                        <option value="">Nothing</option>
+                        @foreach(ActressSort::labels() as $value => $label)
+                            <option value="{{ $value }}" {{ request()->query('sort_by', ActressSort::THUMBNAIL->value) === $value ? 'selected' : '' }}>{{  $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="data__control-item">
+                    <button class="btn--sm btn--primary">Apply</button>
+                </div>
+            </form>
         </div>
 
         @if ($viewMode === ViewMode::GRID->value)

@@ -29,7 +29,7 @@ class Actress extends Model
         return $this->belongsToMany(Video::class);
     }
 
-    protected function getPath(): string
+    public function getPath(): string
     {
         return $this->attributes['thumbnail_path'] ?? 'actresses/thumbnail-default.jpg';
     }

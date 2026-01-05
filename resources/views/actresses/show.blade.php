@@ -29,7 +29,7 @@
                     <p class="actress-bio__section-title">Tags:</p>
                     <div class="actress-bio__section-body space-x-2">
                         @foreach($actress->tags as $tag)
-                            <span class="tag__button">{{ $tag->title }}</span>
+                            <a class="tag__button" href="{{  get_filter_tag_url($tag->slug) }}">&#35;{{ $tag->title }}</a>
                         @endforeach
                         <button class="tag__button toggle-modal" data-target="#tags-modal">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="icon-sm">
