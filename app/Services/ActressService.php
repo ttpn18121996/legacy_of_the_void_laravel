@@ -21,8 +21,8 @@ class ActressService
     {
         $q = Arr::get($filters, 'q');
         $tagSlugs = Arr::get($filters, 'tags', []);
-        $sortMode = Arr::get($filters, 'sort_mode');
-        $sortBy = Arr::get($filters, 'sort_by');
+        $sortBy = Arr::get($filters, 'sort_by', 'nothing');
+        $sortMode = $sortBy === 'nothing' ? null : Arr::get($filters, 'sort_mode');
         $actressIds = [];
 
         if ($q) {

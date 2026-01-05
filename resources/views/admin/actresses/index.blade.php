@@ -37,9 +37,8 @@
                 <div class="data__control-item space-x-2">
                     <div>Without:</div>
                     <select name="sort_by">
-                        <option value="">Nothing</option>
                         @foreach(ActressSort::labels() as $value => $label)
-                            <option value="{{ $value }}" {{ request()->query('sort_by', ActressSort::THUMBNAIL->value) === $value ? 'selected' : '' }}>{{  $label }}</option>
+                            <option value="{{ $value }}" {{ request()->query('sort_by', ActressSort::NOTHING->value) === $value ? 'selected' : '' }}>{{  $label }}</option>
                         @endforeach
                     </select>
                 </div>
