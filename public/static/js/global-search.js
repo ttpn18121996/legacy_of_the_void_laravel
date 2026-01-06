@@ -83,7 +83,7 @@ const globalSearch = {
       data.tags.forEach(tag => {
         const item = document.createElement('a');
         item.classList.add('form-search__suggestion-item');
-        item.href = `/videos?tags[]=${tag.slug}`;
+        item.href = globalSearch.updateTagParam(tag.slug);
         item.textContent = `#${tag.title}`;
         tagItems.appendChild(item);
       });
@@ -97,6 +97,23 @@ const globalSearch = {
     if (suggestion.children.length > 0) {
       formSearch.appendChild(suggestion);
     }
+  },
+
+  updateTagParam: (newTag) => {
+    let url = new URL(window.location.href);
+
+    if (window.location.pathname !== '/videos') {
+      url = new URL('/videos', window.location.origin);
+    }
+
+    let params = url.searchParams;
+    let existingTags = params.getAll('tags[]');
+
+    if (!existingTags.includes(newTag)) {
+        params.append('tags[]', newTag);
+    }
+
+    return url.toString();
   },
 
   createGroup: title => {
