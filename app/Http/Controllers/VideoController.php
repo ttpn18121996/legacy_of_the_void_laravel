@@ -126,6 +126,22 @@ class VideoController extends Controller
         }, $status, $headers);
     }
 
+    public function streamingViaNginx(Request $request)
+    {
+        $fileName = $request->query('file_name');
+        $filePath = $request->query('path');
+        $path = storage_path("app/public/{$filePath}/{$fileName}.mp4");
+        
+        abort_unless(file_exists($path), 404);
+
+        $headers = [
+            'Content-Type' => 'video/mp4',
+            'X-Accel-Redirect' => "/protected-videos/{$filePath}/{$fileName}.mp4",
+        ];
+
+        return response()->noContent(200, $headers);
+    }
+
     public function updateActresses(Request $request)
     {
         $videoId = $request->input('video_id');

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/login', 'login')->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/videos/stream', [VideoController::class, 'stream'])->name('videos.stream');
+Route::get('/videos/stream', [VideoController::class, 'streamingViaNginx'])->name('videos.stream');
 
 Route::group([
     'middleware' => ['auth'],
