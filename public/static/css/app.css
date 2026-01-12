@@ -591,7 +591,8 @@ input.form-input:focus {
 
 @media screen and (min-width: 768px) {
     .data__item--grid {
-        width: 33.333333%;
+        width: 50%;
+        /* width: 33.333333%; */
     }
 }
 

@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    private string $redirectTo = 'home';
+
+    public function showLoginForm()
+    {
+        if (auth()->check()) {
+            return to_route($this->redirectTo);
+        }
+
+        return view('login');
+    }
+
     public function login(Request $request)
     {
         $data = $request->validate([
@@ -20,7 +31,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return to_route('home');
+        return to_route($this->redirectTo);
     }
 
     public function logout(Request $request)
