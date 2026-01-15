@@ -20,7 +20,7 @@
 
             <div class="form-input">
                 <div class="form-input__group">
-                    <input id="email" type="text" name="email" placeholder="Username" autocomplete="off" autofocus />
+                    <input id="email" type="text" name="email" placeholder="Username" autocomplete="off" tabindex="1" autofocus />
                 </div>
                 @error('email')
                     <label for="email" class="text-error">{{ $message }}</label>
@@ -29,15 +29,22 @@
 
             <div class="form-input">
                 <div class="form-input__group">
-                    <input id="password" type="password" name="password" placeholder="Password" autocomplete="off" />
+                    <input id="password" type="password" name="password" placeholder="Password" tabindex="2" autocomplete="off" />
                 </div>
                 @error('password')
                     <label for="password" class="text-error">{{ $message }}</label>
                 @enderror
             </div>
 
+            <div class="form-input">
+                <label for="is_terminal" class="form-input__checkbox">
+                    <input id="is_terminal" type="checkbox" name="is_terminal" value="1" />
+                    <span>Connect to terminal</span>
+                </label>
+            </div>
+
             <div class="form-button">
-                <button type="submit" class="btn btn--primary">Login</button>
+                <button type="submit" class="btn btn--primary" tabindex="3">Login</button>
             </div>
         </form>
     </div>

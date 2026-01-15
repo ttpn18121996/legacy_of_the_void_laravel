@@ -234,4 +234,22 @@ class VideoService
             ->limit($limit)
             ->get();
     }
+
+    public function getAllForTerminal(array $filters = [])
+    {
+        $tagSlugs = Arr::get($filters, 'tags', []);
+
+        $query = Video::select('id', 'title')
+            ->when(count($tagSlugs), function ($query) use ($tagSlugs) {
+                $query->whereHas('tags', function ($query) use ($tagSlugs) {
+                    $query->whereIn('slug', $tagSlugs);
+                }, '=', count($tagSlugs));
+            });
+
+        if (isset($filters['search'])) {
+            $query->where('title', 'like', "%{$filters['search']}%");
+        }
+
+        return $query->get();
+    }
 }

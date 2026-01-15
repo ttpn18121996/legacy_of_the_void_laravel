@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class AuthController extends Controller
 {
@@ -22,13 +23,21 @@ class AuthController extends Controller
         $data = $request->validate([
             'email' => 'required',
             'password' => 'required',
+            'is_terminal' => 'nullable',
         ]);
         $data['email'] = str($data['email'])->append('@example.com')->lower()->toString();
+        $credentials = Arr::only($data, ['email', 'password']);
 
-        if (! auth()->attempt($data)) {
+        if (! auth()->attempt($credentials)) {
             return back()->withErrors([
                 'email' => __('auth.failed'),
             ]);
+        }
+
+        if (! empty($data['is_terminal'])) {
+            session()->put('is_terminal', 1);
+
+            return to_route('terminal.main');
         }
 
         return to_route($this->redirectTo);

@@ -116,5 +116,10 @@
                 <p>Blank</p>
             </a>
         </li>
+        <li>
+            <a class="space-x-4" href="{{ route('connect-terminal') }}">
+                <p>Connect Terminal</p>
+            </a>
+        </li>
     </ul>
 </nav>

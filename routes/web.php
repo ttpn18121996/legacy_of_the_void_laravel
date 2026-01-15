@@ -9,6 +9,7 @@ use App\Http\Controllers\ListViewController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\RandomVideoController;
 use App\Http\Controllers\VideoController;
+use App\Http\Middleware\RedirectToTerminal;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/login', 'login')->name('login');
@@ -16,9 +17,9 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/videos/stream', [VideoController::class, 'streamingViaNginx'])->name('videos.stream');
 
 Route::group([
-    'middleware' => ['auth'],
+    'middleware' => ['auth', RedirectToTerminal::class],
 ], function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->withoutMiddleware(RedirectToTerminal::class);
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/search', [HomeController::class, 'search'])->name('search');
@@ -54,6 +55,12 @@ Route::group([
 
     Route::get('/random-videos', RandomVideoController::class)->name('random-videos');
     Route::view('/blank', 'blank')->name('blank');
+    Route::get('connect-terminal', function () {
+        session()->put('is_terminal', true);
+        return to_route('terminal.main');
+    })->name('connect-terminal');
 });
+
+require __DIR__.'/terminal.php';
 
 require __DIR__.'/admin.php';

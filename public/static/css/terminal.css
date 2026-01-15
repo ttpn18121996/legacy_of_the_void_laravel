@@ -1,0 +1,93 @@
+:root {
+    --terminal-bg-color: #1e1e1e;
+    --terminal-text-color: #00ff00;
+    --terminal-font-family: 'Courier New', Courier, monospace;
+    --terminal-font-size: 14px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.terminal {
+    background-color: var(--terminal-bg-color);
+    color: var(--terminal-text-color);
+    font-family: var(--terminal-font-family);
+    font-size: var(--terminal-font-size);
+}
+
+.terminal__container {
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+    padding: .25rem;
+}
+
+.terminal__input-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.terminal__input-wrapper > * + * {
+    margin-left: 1rem;
+}
+
+.terminal__input {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.terminal__input input {
+    background-color: transparent;
+    border: none;
+    caret-color: transparent;
+    color: var(--terminal-text-color);
+    font-family: var(--terminal-font-family);
+    font-size: var(--terminal-font-size);
+    outline: none;
+    width: 100%;
+    z-index: 1;
+}
+
+.terminal__caret {
+    display: none;
+    width: 1ch;
+    height: 1em;
+    background-color: var(--terminal-text-color);
+    animation: blink 1s ease-in-out infinite;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+
+.terminal__input input:focus + .terminal__caret {
+    display: inline-block;
+}
+
+.terminal__input input.typing + .terminal__caret {
+    animation: none;
+    display: inline-block;
+}
+
+.terminal__list th, td {
+    text-align: left;
+    padding: 0 .5rem;
+}
+
+.terminal__list td {
+    color: #ffffff;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
