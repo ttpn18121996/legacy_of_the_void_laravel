@@ -211,20 +211,22 @@ const terminal = {
   },
 
   helpOutput() {
+    let helpRows = '';
+
+    for (const category in this._info.helper) {
+      helpRows += `<tr><th colspan="2" class="terminal__category">${category}</th></tr>`;
+      const categories = this._info.helper[category];
+      for (const command in categories) {
+        helpRows += `<tr><th>&nbsp;&nbsp;${command}</th><td>${categories[command]}</td></tr>`;
+      }
+      helpRows += `<tr><th>&nbsp;</th><td>&nbsp;</td></tr>`;
+    }
+    
     const helpText = `
       <p>PHP version: ${this._info.php_ver} - Laravel version: ${this._info.laravel_ver}</p><br>
       Available commands:<br>
       <table class="terminal__list">
-        <tr><th>help</th><td>Show this help message</td></tr>
-        <tr><th>&nbsp;</th><td>&nbsp;</td></tr>
-        <tr><th>videos:detail &lt;id&gt;</th><td>Show video details</td></tr>
-        <tr><th>videos:list</th><td>List all videos</td></tr>
-        <tr><th>videos:tags &lt;tag1&gt; [&lt;tag2&gt; ...]</th><td>List videos with specific tags</td></tr>
-        <tr><th>&nbsp;</th><td>&nbsp;</td></tr>
-        <tr><th>refresh</th><td>Reload the terminal page</td></tr>
-        <tr><th>clear|cls</th><td>Clear the terminal</td></tr>
-        <tr><th>exit|quit</th><td>Exit the terminal</td></tr>
-        <tr><th>logout</th><td>Logout of this session</td></tr>
+        ${helpRows}
       </table>
     `;
     this.printOutput(helpText);

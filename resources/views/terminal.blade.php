@@ -9,13 +9,14 @@
     <link rel="stylesheet" href="{{ asset('static/css/terminal.css?v='.time()) }}">
 </head>
 <body class="terminal">
-    <script src="{{ asset('static/js/terminal.js') }}"></script>
+    <script src="{{ asset('static/js/terminal.js?v='.time()) }}"></script>
     <script>
         terminal.configure({
             username: "{{ str(config('app.name'))->snake() }}",
             is_logged_in: true,
             php_ver: "{{ phpversion() }}",
             laravel_ver: "{{ app()->version() }}",
+            helper: @json($helper),
         }).init();
     </script>
 </body>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Terminal\CommandController;
 use App\Http\Middleware\ExitTerminal;
+use App\Services\TerminalService;
 use Illuminate\Support\Facades\Route;
 
 Route::group([
@@ -9,8 +10,10 @@ Route::group([
     'prefix' => 'terminal',
     'as' => 'terminal.'
 ], function () {
-    Route::get('/', function () {
-        return view('terminal');
+    Route::get('/', function (TerminalService $terminalService) {
+        $helper = $terminalService->help();
+
+        return view('terminal', compact('helper'));
     })->name('main')->middleware(['auth']);
 
     Route::post('/execute-command', CommandController::class)->name('execute-command');
