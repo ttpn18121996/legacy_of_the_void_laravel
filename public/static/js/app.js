@@ -99,6 +99,7 @@ window.lotv = (function () {
 
   function init() {
     sidebarHandler();
+    dropdownHandler();
     menuHasChildrenHandler();
     inputPasswordToggle();
   }
@@ -123,6 +124,28 @@ window.lotv = (function () {
     main.addEventListener('click', () => {
       sidebar.classList.add('sidebar-hidden');
       sidebar.classList.remove('sidebar-show');
+    });
+  }
+
+  function dropdownHandler() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+
+    dropdowns.forEach(dropdown => {
+      const trigger = dropdown.querySelector('.dropdown-trigger');
+      const content = dropdown.querySelector(trigger.dataset.target);
+      content.style.display = 'none';
+      trigger.addEventListener('click', () => {
+        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+      });
+    });
+
+    const main = document.querySelector('main');
+    main.addEventListener('click', () => {
+      dropdowns.forEach(dropdown => {
+        const trigger = dropdown.querySelector('.dropdown-trigger');
+        const content = dropdown.querySelector(trigger.dataset.target);
+        content.style.display = 'none';
+      });
     });
   }
 

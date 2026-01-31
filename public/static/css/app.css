@@ -58,7 +58,7 @@ header .toggle-sidebar button:hover {
 
 #sidebar .menu {
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 #sidebar .menu>li a {
@@ -178,6 +178,60 @@ footer .footer--copyright {
     text-align: center;
     color: var(--dark);
     font-size: .75rem;
+}
+
+.user-info {
+    position: relative;
+    height: 100%;
+    display: flex;
+}
+
+.user-info__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    user-select: none;
+}
+
+.user-info__items {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 12rem;
+    background-color: #fff;
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+    border-top: none;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+.user-info__item {
+    width: 100%;
+}
+
+.user-info__item button,
+.user-info__item a {
+    display: block;
+    width: 100%;
+    padding: .5rem 1rem;
+    border: none;
+    text-align: left;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--dark);
+}
+
+.user-info__item button:hover,
+.user-info__item a:hover {
+    background-color: var(--slate-100);
 }
 
 .statistical {

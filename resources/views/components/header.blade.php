@@ -7,10 +7,5 @@
         </button>
     </div>
 
-    <div class="user-info">
-        <form action="{{  route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn--sm btn--primary">Logout</button>
-        </form>
-    </div>
+    <x-user-info />
 </header>
