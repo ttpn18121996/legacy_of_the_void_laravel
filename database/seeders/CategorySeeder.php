@@ -19,7 +19,7 @@ class CategorySeeder extends Seeder
             'natural tits', 'nurse', 'office', 'oil', 'red head', 'small tits', 'school', 'squirt', 'stepmom',
             'stepsister', 'stockings', 'student', 'swallow', 'tattoo', 'teacher', 'teen', 'threesome', 'uniform',
             'wedding', 'workout', 'x mas', 'cum inside', 'underwear', 'medium tits', 'boss', 'asian', 'neighbor',
-            'wearing', 'nice tits', 'beautiful pussy', 'pool',
+            'wearing', 'nice tits', 'beautiful pussy', 'pool', 'man with many women',
         ];
 
         $now = now();

@@ -24,7 +24,7 @@ class ListViewController extends Controller
 
         if ($videos !== false) {
             $videos = collect($videos)
-                ->filter(fn ($file) => $file !== '.' && $file !== '..')
+                ->filter(fn ($file) => $file !== '.' && $file !== '..' && str($file)->endsWith('.mp4'))
                 ->map(fn ($file) => ((object) [
                     'title' => (string) str($file)->basename('.mp4'),
                     'path' => $path,
