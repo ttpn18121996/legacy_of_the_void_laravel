@@ -19,7 +19,7 @@ class Sidebar extends Component
      */
     public function __construct()
     {
-        $this->tags = $this->getTags();
+        $this->tags = collect();
     }
 
     private function getTags(): Collection

@@ -403,6 +403,21 @@ window.lotv = (function () {
     });
   }
 
+  function useFilterGlobal() {
+    const filterContent = document.getElementById('filter-content');
+    const filterContentParent = filterContent.parentElement;
+    const filterContentParentRect = filterContentParent.getBoundingClientRect();
+    filterContent.style.top = `${filterContentParentRect.top - 16}px`;
+    filterContent.style.display = 'none';
+
+    const btnToggleFilters = document.querySelectorAll('.btn__toggle-filter');
+    for (const btnToggleFilter of btnToggleFilters) {
+      btnToggleFilter.addEventListener('click', () => {
+        filterContent.style.display = filterContent.style.display === 'block' ? 'none' : 'block' ;
+      });
+    }
+  }
+
   function bindEvent(selector, event, callback) {
     let elements;
 
@@ -443,6 +458,7 @@ window.lotv = (function () {
     useSelectionList,
     useScrollToTop,
     useVideoPlayer,
+    useFilterGlobal,
     ajax,
     loader,
     toast,

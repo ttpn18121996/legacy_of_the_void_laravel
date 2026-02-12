@@ -12,7 +12,7 @@
 
 @section('content')
     <div class="main__header">
-        <x-search-form :filteredTags="$filteredTags ?? []" />
+        <x-search-form :filteredTags="$filteredTags ?? null" />
     </div>
     <div class="main__body">
         <div class="data__controls">

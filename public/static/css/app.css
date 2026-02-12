@@ -300,10 +300,21 @@ input.form-input:focus {
     z-index: 45;
 }
 
+.filter-form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.filter-form-wrapper > * + * {
+    margin-left: .5rem;
+}
+
 .form-search {
     position: relative;
     width: 100%;
-    max-width: 20rem;
 }
 
 .form-search__box {
@@ -378,6 +389,31 @@ input.form-input:focus {
 
 .form-search__suggestion-items a:hover {
     background-color: var(--slate-100);
+}
+
+.btn__toggle-filter {
+    border-radius: .25rem;
+    background: var(--dark);
+    color: var(--light);
+    cursor: pointer;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    outline: none;
+    height: 2.5rem;
+}
+
+.filter-content {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    z-index: 45;
+    padding: 1rem;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
 .data__controls {

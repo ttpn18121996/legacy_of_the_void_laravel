@@ -36,6 +36,7 @@
     <script>
         lotv.init();
         lotv.useScrollToTop();
+        lotv.useFilterGlobal();
         globalSearch.init();
     </script>
     @stack('scripts')
