@@ -41,7 +41,7 @@
             </form>
         </div>
 
-        <div class="flexible-table">
+        <div class="flexible-table" id="actresses-table">
             @forelse($actresses as $actress)
                 <div class="flexible-table__row">
                     <div class="flexible-table__cell-header">
