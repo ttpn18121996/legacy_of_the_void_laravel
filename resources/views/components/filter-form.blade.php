@@ -6,7 +6,8 @@
                     id="tag-{{ $tag->id }}"
                     type="checkbox"
                     name="tags[]"
-                    value="{{ $tag->slug }}" {{ in_array($tag->slug, $filteredTags->pluck('slug')->toArray()) ? 'checked' : '' }}
+                    value="{{ $tag->slug }}"
+                    {{ in_array($tag->slug, $filteredTags->pluck('slug')->toArray()) ? 'checked' : '' }}
                 />
                 <label for="tag-{{ $tag->id }}">{{ $tag->title_for_human }}</label>
             </div>

@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="main__header">
-        <x-search-form />
+        <x-search-form action="{{ route('videos.index') }}" />
     </div>
     <div class="main__body">
         <div class="video-wrapper">
