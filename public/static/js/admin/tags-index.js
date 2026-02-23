@@ -6,7 +6,7 @@ const tagsIndex = function () {
     const btnUpdateTag = e.target;
     const id = btnUpdateTag.dataset.id;
     const url = btnUpdateTag.dataset.url;
-    const inputTag = document.getElementById(`tag${id}`);
+    const inputTag = document.querySelector(`#tag${id} input`);
 
     lotv.ajax({
       method: 'PUT',

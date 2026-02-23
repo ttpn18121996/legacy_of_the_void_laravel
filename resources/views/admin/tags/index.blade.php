@@ -39,7 +39,7 @@
                     <tr id="tag{{ $tag->id }}">
                         <td>{{ $tag->id }}</td>
                         <td class="editable">
-                            <input type="text" value="{{ $tag->title }}" id="tag{{ $tag->id }}">
+                            <input type="text" value="{{ $tag->title }}">
                         </td>
                         <td id="slug{{ $tag->id }}">{{ $tag->slug }}</td>
                         <td>

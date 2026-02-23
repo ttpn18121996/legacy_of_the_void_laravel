@@ -405,6 +405,11 @@ window.lotv = (function () {
 
   function useFilterGlobal() {
     const filterContent = document.getElementById('filter-content');
+
+    if (!filterContent) {
+      return;
+    }
+
     const filterContentParent = filterContent.parentElement;
     const filterContentParentRect = filterContentParent.getBoundingClientRect();
     filterContent.style.top = `${filterContentParentRect.top - 16}px`;
