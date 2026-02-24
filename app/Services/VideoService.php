@@ -32,6 +32,7 @@ class VideoService
         $builder = Video::with(['thumbnails', 'tags'])
             ->when($q, function ($query) use ($q, $videoIds) {
                 $query->where('title', 'like', "%{$q}%")
+                    ->orWhere('id', $q)
                     ->orWhereIn('id', $videoIds);
             })
             ->when(count($tagSlugs), function ($query) use ($tagSlugs) {

@@ -18,9 +18,9 @@
         <x-search-form />
     </div>
     <div class="main__body">
-        <div class="flexible-table">
+        <div class="flexible-table" id="videos-table">
             @forelse($videos as $video)
-                <div class="flexible-table__row">
+                <div class="flexible-table__row" id="video{{ $video->id }}">
                     <div class="flexible-table__cell-header">
                         <div class="flexible-table__cell-thumbnail">
                             <a href="{{ route('videos.show', $video) }}" title="{{ $video->title }}">
