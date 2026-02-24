@@ -24,11 +24,14 @@ class ListViewController extends Controller
 
         if ($videos !== false) {
             $videos = collect($videos)
-                ->filter(fn ($file) => $file !== '.' && $file !== '..' && str($file)->endsWith('.mp4'))
-                ->map(fn ($file) => ((object) [
-                    'title' => (string) str($file)->basename('.mp4'),
+                ->filter(fn ($file) => $file !== '.' && $file !== '..')
+                ->map(fn ($file) => (object) [
+                    'title' => (string) str($file)->beforeLast('.mp4'),
                     'path' => $path,
-                ]))
+                    'created_at' => date('Y-m-d H:i:s', filectime($reviewPath.'/'.$file)),
+                    'is_download' => str($file)->endsWith('.mp4.crdownload'),
+                ])
+                ->sort(fn ($a, $b) => strcmp($b->created_at, $a->created_at))
                 ->values();
         }
 

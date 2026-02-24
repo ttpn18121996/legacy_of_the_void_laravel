@@ -595,6 +595,15 @@ input.form-input:focus {
     flex-shrink: 0;
 }
 
+.data__item--downloading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0 1rem;
+}
+
 .data__state--list {
     font-size: .75rem;
     padding: .5rem .75rem;
