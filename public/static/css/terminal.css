@@ -1,6 +1,8 @@
 :root {
     --terminal-bg-color: #1e1e1e;
     --terminal-text-color: #00ff00;
+    --terminal-bg-highlight: #fef08a;
+    --terminal-text-highlight: #1e1e1e;
     --terminal-font-family: 'Courier New', Courier, monospace;
     --terminal-font-size: 14px;
 }
@@ -9,6 +11,11 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+.highlight {
+    background-color: var(--terminal-bg-highlight);
+    color: var(--terminal-text-highlight);
 }
 
 .terminal {
@@ -81,6 +88,16 @@
 
 .terminal__list td {
     color: #ffffff;
+}
+
+.terminal__video-player {
+    border-radius: .25rem;
+    height: 90vh;
+    overflow: hidden;
+}
+
+.terminal__video-player video {
+    height: 100%;
 }
 
 @keyframes blink {

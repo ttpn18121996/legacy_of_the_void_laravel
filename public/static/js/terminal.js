@@ -26,6 +26,10 @@ const terminal = {
     return this;
   },
 
+  isMobile() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  },
+
   init() {
     this._terminal = this.createElement('terminal__container');
     this._output = this.createElement('terminal__output');
@@ -35,7 +39,10 @@ const terminal = {
     this._canvas = document.createElement('canvas');
     this._context = this._canvas.getContext('2d');
     this.mountElements();
-    this.bindEvents();
+
+    if (!this.isMobile()) {
+      this.bindEvents();
+    }
   },
 
   createElement(className, elementType = 'div', attributes = {}) {
@@ -50,12 +57,21 @@ const terminal = {
   mountElements() {
     this._terminal.appendChild(this._output);
 
+    // Mount the prompt to the left of the input and caret
     const inputWrapper = this.createElement('terminal__input-wrapper');
     inputWrapper.appendChild(this._prompt);
-    const inputContainer = this.createElement('terminal__input');
-    inputContainer.appendChild(this._input);
-    inputContainer.appendChild(this._caret);
-    inputWrapper.appendChild(inputContainer);
+
+    if (this.isMobile()) {
+      this._prompt.textContent = `The terminal mode doesn't support on the mobile devices.`;
+      setTimeout(() => {
+        this.terminate();
+      }, 3000);
+    } else {
+      const inputContainer = this.createElement('terminal__input');
+      inputContainer.appendChild(this._input);
+      inputContainer.appendChild(this._caret);
+      inputWrapper.appendChild(inputContainer);
+    }
 
     this._terminal.appendChild(inputWrapper);
 
@@ -65,6 +81,16 @@ const terminal = {
   bindEvents() {
     document.addEventListener('click', () => {
       this._input.focus();
+    });
+    document.addEventListener('mouseup', () => {
+      const selectedText = window.getSelection().toString();
+      if (selectedText.length > 0) {
+        navigator.clipboard.writeText(selectedText).then(() => {
+          window.getSelection().removeAllRanges();
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
     });
     this.authenticate();
     this.inputEvents();
@@ -164,8 +190,9 @@ const terminal = {
     this._history.push(command);
     this._historyIndex = this._history.length;
     const parts = command.split(' ');
-    const baseCommand = parts[0].toLowerCase();
-    const args = parts.slice(1);
+    // const baseCommand = parts[0].toLowerCase();
+    // const args = parts.slice(1);
+    const {  baseCommand, args } = this.getArgumentsFromCommand(command);
 
     switch (baseCommand) {
       case 'help':
@@ -189,6 +216,45 @@ const terminal = {
         this.callToCommandExecutor(baseCommand, args);
         break;
     }
+  },
+
+  getArgumentsFromCommand(command) {
+    const parts = command.split(' ');
+    const baseCommand = parts[0].toLowerCase();
+    const args = [];
+    const tmpCurrentArg = {
+      isOpen: false,
+      openChar: '',
+      value: '',
+    };
+
+    for (let i = 1; i < parts.length; i++) {
+      if (!parts[i]) {
+        break;
+      }
+
+      if (parts[i].startsWith('"') || parts[i].startsWith("'")) {
+        tmpCurrentArg.isOpen = true;
+        tmpCurrentArg.openChar = parts[i].charAt(0);
+        tmpCurrentArg.value = parts[i].slice(1);
+      } else if (parts[i].endsWith(tmpCurrentArg.openChar) && tmpCurrentArg.isOpen) {
+        tmpCurrentArg.value += ' ' + parts[i].slice(0, -1);
+        args.push(tmpCurrentArg.value);
+        tmpCurrentArg.isOpen = false;
+        tmpCurrentArg.openChar = '';
+        tmpCurrentArg.value = '';
+      } else if (tmpCurrentArg.isOpen) {
+        tmpCurrentArg.value += ' ' + parts[i];
+      } else {
+        args.push(parts[i]);
+      }
+
+      if (i === parts.length - 1 && tmpCurrentArg.isOpen) {
+        args.push(tmpCurrentArg.value.replace(/^["']|["']$/g, ''));
+      }
+    }
+
+    return { baseCommand, args };
   },
 
   loginHandler(data) {
