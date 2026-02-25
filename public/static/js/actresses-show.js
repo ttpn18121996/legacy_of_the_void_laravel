@@ -11,7 +11,7 @@ const actressesShow = function (setting = {}) {
 
   if (updateTagsUrl) {
     const btnUpdateTags = document.getElementById('update-tags');
-    btnUpdateTags.addEventListener('click', e => {
+    lotv.bindEvent(btnUpdateTags, 'click', e => {
       e.preventDefault();
       const inputTags = document.querySelectorAll('input[name="tags[]"]');
       const tags = [];

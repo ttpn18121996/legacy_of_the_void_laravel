@@ -19,21 +19,7 @@ class ListViewController extends Controller
     public function index(Request $request)
     {
         $path = $request->query('path', PathType::REVIEW->value);
-        $reviewPath = storage_path('app/public/'.$path);
-        $videos = scandir($reviewPath);
-
-        if ($videos !== false) {
-            $videos = collect($videos)
-                ->filter(fn ($file) => $file !== '.' && $file !== '..')
-                ->map(fn ($file) => (object) [
-                    'title' => (string) str($file)->beforeLast('.mp4'),
-                    'path' => $path,
-                    'created_at' => date('Y-m-d H:i:s', filectime($reviewPath.'/'.$file)),
-                    'is_download' => str($file)->endsWith('.mp4.crdownload'),
-                ])
-                ->sort(fn ($a, $b) => strcmp($b->created_at, $a->created_at))
-                ->values();
-        }
+        $videos = $this->videoService->getVideosForReview($path === PathType::APPROVED->value);
 
         return view('list-view.index', [
             'videos' => $videos,

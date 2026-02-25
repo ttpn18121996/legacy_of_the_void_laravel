@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PathType;
 use App\Enums\SortDestination;
 use App\Enums\VideoSort;
 use App\Models\Actress;
@@ -9,6 +10,7 @@ use App\Models\Tag;
 use App\Models\Video;
 use App\Models\VideoThumbnail;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 class VideoService
@@ -117,7 +119,7 @@ class VideoService
         $thumbnailPath = storage_path("app/public/thumbnails/{$title}");
 
         if (! file_exists($videoPath)) {
-            FacadesLog::error("Video not found: {$videoPath}");
+            Log::error("Video not found: {$videoPath}");
 
             return false;
         }
@@ -236,7 +238,29 @@ class VideoService
             ->get();
     }
 
-    public function getAllForTerminal(array $filters = [])
+    public function getVideosForReview(bool $approved = false): Collection
+    {
+        $path = $approved ? PathType::APPROVED->value : PathType::REVIEW->value;
+        $reviewPath = storage_path('app/public/'.$path);
+        $videos = scandir($reviewPath);
+
+        if ($videos === false) {
+            return collect();
+        }
+
+        return collect($videos)
+            ->filter(fn ($file) => $file !== '.' && $file !== '..')
+            ->map(fn ($file) => (object) [
+                'title' => (string) str($file)->beforeLast('.mp4'),
+                'path' => $path,
+                'created_at' => date('Y-m-d H:i:s', filectime($reviewPath.'/'.$file)),
+                'is_download' => str($file)->endsWith('.mp4.crdownload'),
+            ])
+            ->sort(fn ($a, $b) => strtotime($b->created_at) <=> strtotime($a->created_at))
+            ->values();
+    }
+
+    public function getAllForTerminal(array $filters = []): Collection
     {
         $tagSlugs = Arr::get($filters, 'tags', []);
 
@@ -247,8 +271,9 @@ class VideoService
                 }, '=', count($tagSlugs));
             });
 
-        if (isset($filters['search'])) {
-            $query->where('title', 'like', "%{$filters['search']}%");
+        if ($keyword = ($filters['search'] ?? null)) {
+            $query->where('title', 'like', "%{$keyword}%")
+                ->orWhere('id', $keyword);
         }
 
         return $query->get();

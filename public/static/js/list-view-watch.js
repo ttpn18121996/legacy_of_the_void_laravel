@@ -6,7 +6,7 @@ const listViewWatch = function (setting = {}) {
 
   if (publishUrl) {
     const btnPublish = document.getElementById('publish-video');
-    btnPublish.addEventListener('click', e => {
+    lotv.bindEvent(btnPublish, 'click', e => {
       e.preventDefault();
       lotv.loader.start();
 
