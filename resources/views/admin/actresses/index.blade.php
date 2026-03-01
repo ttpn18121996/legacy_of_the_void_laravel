@@ -43,7 +43,7 @@
 
         <div class="flexible-table" id="actresses-table">
             @forelse($actresses as $actress)
-                <div class="flexible-table__row">
+                <div class="flexible-table__row" id="actress{{ $actress->id }}">
                     <div class="flexible-table__cell-header">
                         <a href="{{ route('actresses.show', ['id' => $actress->id]) }}" target="_blank">
                             <div class="table__thumbnail">
