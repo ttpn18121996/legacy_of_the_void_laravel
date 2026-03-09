@@ -449,6 +449,37 @@ body {
     margin-left: .5rem;
 }
 
+.downloading {
+    position: relative;
+    display: inline-block;
+    width: 8.25rem;
+}
+
+.download-icon {
+    position: absolute;
+    top: -0.5rem;
+    right: 0.75rem;
+    display: inline-block;
+    width: .75rem;
+    height: .75rem;
+    border: 2px solid var(--dark);
+    border-top-color: transparent;
+    border-right-color: transparent;
+    transform: rotate(-45deg);
+    animation: downloading 1s ease-out infinite;
+}
+
+@keyframes downloading {
+    0% {
+        top: -0.5rem;
+        opacity: 1;
+    }
+    100% {
+        top: .5rem;
+        opacity: 0;
+    }
+}
+
 @media screen and (min-width: 640px) {
     .form-input__checkbox-item {
         width: 25%;

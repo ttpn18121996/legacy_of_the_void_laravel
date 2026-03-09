@@ -20,7 +20,7 @@
                             #{{ $index + 1 }} | {{ $video->title }}
                             <p>{{ $video->created_at }}</p>
                         </a>
-                        <div class="data__item--downloading">Downloading...</div>
+                        <div class="downloading">Downloading <span class="download-icon"></span></div>
                     @else
                         <a class="data__item--link" href="{{  route('list-view.show', ['title' => $video->title, 'path' => $video->path]) }}">
                             #{{ $index + 1 }} | {{ $video->title }}
