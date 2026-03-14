@@ -25,15 +25,34 @@
                     <label for="title" class="text-error">{{ $message }}</label>
                 @enderror
             </div>
+            
+            <div class="form-input">
+                <label for="path" class="required">Path</label>
+                <input id="path" type="text" name="path" value="{{ old('path', $video->path) }}" placeholder="videos/title-video.mp4" autocomplete="off" />
+                @error('path')
+                    <label for="path" class="text-error">{{ $message }}</label>
+                @enderror
+            </div>
+
+            @php
+                $thumbnailPath = str($video->thumbnails->first()->path)->beforeLast('/')->toString();
+            @endphp
+            <div class="form-input">
+                <label for="thumbnail_directory" class="required">Thumbnail directory</label>
+                <input id="thumbnail_directory" type="text" name="thumbnail_directory" value="{{ old('thumbnail_directory', $thumbnailPath) }}" placeholder="thumbnails/title-video-thumbnails" autocomplete="off" />
+                @error('thumbnail_directory')
+                    <label for="thumbnail_directory" class="text-error">{{ $message }}</label>
+                @enderror
+            </div>
 
             <div class="form-input">
                 <label for="tags">Actresses</label>
-                <x-selection-list name="actresses" :items="$actresses" :selected-items="$selectedActresses" />
+                <x-selection-list name="actresses" :items="$actresses" :selected-items="$selectedActresses" size="sm" />
             </div>
             
             <div class="form-input">
                 <label for="tags">Tags</label>
-                <x-selection-list name="tags" :items="$tags" :selected-items="$selectedTags" />
+                <x-selection-list name="tags" :items="$tags" :selected-items="$selectedTags" size="sm" />
             </div>
 
             <div class="data--grid space-x-2">

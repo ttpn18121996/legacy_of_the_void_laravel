@@ -72,6 +72,7 @@ class VideoService
 
         $video->update([
             'title' => $data['title'],
+            'path' => $data['path'],
         ]);
 
         $actresses = Arr::get($data, 'actresses', []);
@@ -81,11 +82,18 @@ class VideoService
         $video->tags()->sync($tags);
 
         VideoThumbnail::where('video_id', $video->id)->get()->each(function ($thumbnail, $index) use ($data) {
-            if (isset($data['default_thumbnail']) && $data['default_thumbnail'] == $index + 1) {
-                $thumbnail->update(['is_default' => true]);
-            } else {
-                $thumbnail->update(['is_default' => false]);
+            $dataUpdate = [];
+            if (isset($data['thumbnail_directory'])) {
+                $dataUpdate['path'] = $data['thumbnail_directory']. "/thumbnail_" . ($index + 1) . '.png';
             }
+
+            if (isset($data['default_thumbnail']) && $data['default_thumbnail'] == $index + 1) {
+                $dataUpdate['is_default'] = true;
+            } else {
+                $dataUpdate['is_default'] = false;
+            }
+
+            $thumbnail->update($dataUpdate);
         });
 
         return $video;
@@ -95,7 +103,7 @@ class VideoService
     {
         $video = Video::findOrFail($id);
 
-        $result = $this->moveToTrash($video->title, 'videos');
+        $result = $this->moveToTrash($video->title, $video->isOldPath() ? 'videos' : "media/{$video->title}");
 
         if (! $result) {
             Log::error("Failed to move video to trash: {$video->title}");
@@ -128,6 +136,10 @@ class VideoService
             Log::error("Failed to move video: {$videoPath}");
 
             return false;
+        }
+
+        if (str($from)->startsWith('media')) {
+            $thumbnailPath = storage_path("app/public/{$from}");
         }
 
         if (file_exists($thumbnailPath)) {
@@ -238,10 +250,9 @@ class VideoService
             ->get();
     }
 
-    public function getVideosForReview(bool $approved = false): Collection
+    public function getVideosForReview(PathType $path): Collection
     {
-        $path = $approved ? PathType::APPROVED->value : PathType::REVIEW->value;
-        $reviewPath = storage_path('app/public/'.$path);
+        $reviewPath = storage_path('app/public/'.$path->value);
         $videos = scandir($reviewPath);
 
         if ($videos === false) {
@@ -252,7 +263,7 @@ class VideoService
             ->filter(fn ($file) => $file !== '.' && $file !== '..')
             ->map(fn ($file) => (object) [
                 'title' => (string) str($file)->beforeLast('.mp4'),
-                'path' => $path,
+                'path' => $path->value,
                 'created_at' => date('Y-m-d H:i:s', filectime($reviewPath.'/'.$file)),
                 'is_download' => str($file)->endsWith('.mp4.crdownload'),
             ])

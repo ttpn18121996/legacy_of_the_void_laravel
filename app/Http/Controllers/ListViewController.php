@@ -19,7 +19,7 @@ class ListViewController extends Controller
     public function index(Request $request)
     {
         $path = $request->query('path', PathType::REVIEW->value);
-        $videos = $this->videoService->getVideosForReview($path === PathType::APPROVED->value);
+        $videos = $this->videoService->getVideosForReview(PathType::from($path));
 
         return view('list-view.index', [
             'videos' => $videos,

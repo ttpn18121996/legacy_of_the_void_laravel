@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Actress;
-use App\Models\Tag;
 use App\Services\ActressService;
 use App\Services\TagService;
 use App\Services\VideoService;
@@ -50,6 +48,8 @@ class VideoController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'path' => ['required', 'string', 'max:255'],
+            'thumbnail_directory' => ['required', 'string', 'max:255'],
             'default_thumbnail' => ['required', 'integer', 'min:1', 'max:8'],
             'actresses' => ['array'],
             'actresses.*' => ['exists:actresses,id'],

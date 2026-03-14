@@ -66,4 +66,9 @@ class Video extends Model
     {
         return in_array($this->getQualityAttribute(), ['HD', '2K']);
     }
+
+    public function isOldPath(): bool
+    {
+        return str($this->path)->startsWith('videos');
+    }
 }

@@ -61,7 +61,7 @@ header .toggle-sidebar button:hover {
     margin-bottom: 2rem;
 }
 
-#sidebar .menu>li a {
+#sidebar .menu > li a {
     display: flex;
     align-items: center;
     padding-top: .5rem;
@@ -70,15 +70,15 @@ header .toggle-sidebar button:hover {
     padding-right: 2rem;
 }
 
-#sidebar .menu>li a:hover {
+#sidebar .menu > li a:hover {
     background-color: var(--slate-100);
 }
 
-#sidebar .menu>li a.has-children {
+#sidebar .menu > li a.has-children {
     position: relative;
 }
 
-#sidebar .menu>li a.has-children::after {
+#sidebar .menu > li a.has-children::after {
     position: absolute;
     right: 1rem;
     top: 45%;
@@ -91,7 +91,7 @@ header .toggle-sidebar button:hover {
     transition: all .3s ease;
 }
 
-#sidebar .menu>li a.has-children.open::after {
+#sidebar .menu > li a.has-children.open::after {
     transform: rotate(45deg);
 }
 
@@ -100,11 +100,11 @@ header .toggle-sidebar button:hover {
     display: none;
 }
 
-#sidebar .menu>li a.has-children.open+.submenu {
+#sidebar .menu > li a.has-children.open + .submenu {
     display: block;
 }
 
-#sidebar .submenu>li a {
+#sidebar .submenu > li a {
     display: flex;
     align-items: center;
     padding-top: .5rem;
@@ -114,7 +114,7 @@ header .toggle-sidebar button:hover {
     position: relative;
 }
 
-#sidebar .submenu>li a::before {
+#sidebar .submenu > li a::before {
     content: '';
     position: absolute;
     left: 1.5rem;
@@ -492,15 +492,18 @@ input.form-input:focus {
 }
 
 .selection-list__items {
-    height: 20rem;
     overflow: auto;
     margin-bottom: 1rem;
     padding-left: 1rem;
     padding-right: 1rem;
 }
 
-.selection-list__items>*+* {
-    margin-top: .5rem;
+.selection-list__items--sm {
+    height: 10rem;
+}
+
+.selection-list__items--md {
+    height: 20rem;
 }
 
 .selection-list__checkbox {
@@ -691,7 +694,6 @@ input.form-input:focus {
 @media screen and (min-width: 768px) {
     .data__item--grid {
         width: 50%;
-        /* width: 33.333333%; */
     }
 }
 

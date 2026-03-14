@@ -46,7 +46,7 @@
             
             <div class="form-input">
                 <label for="tags">Tags</label>
-                <x-selection-list name="tags" :items="$tags" :selected-items="$selectedTags" />
+                <x-selection-list name="tags" :items="$tags" :selected-items="$selectedTags" size="sm" />
             </div>
 
             <div class="form-button space-x-2">

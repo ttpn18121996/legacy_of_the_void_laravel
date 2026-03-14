@@ -131,8 +131,17 @@ class VideoController extends Controller
         $fileName = $request->query('file_name');
         $filePath = $request->query('path');
         $path = storage_path("app/public/{$filePath}/{$fileName}.mp4");
-        
-        abort_unless(file_exists($path), 404);
+
+        if (! file_exists($path)) {
+            if ($filePath !== 'videos') {
+                abort(404);
+            }
+
+            $path = storage_path("app/public/media/{$fileName}/{$fileName}.mp4");
+            $filePath = "media/{$fileName}";
+
+            abort_unless(file_exists($path), 404);
+        }
 
         $headers = [
             'Content-Type' => 'video/mp4',

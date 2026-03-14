@@ -2,13 +2,14 @@
     'name',
     'items' => [],
     'selectedItems' => [],
+    'size' => 'md',
 ])
 
 <div class="selection-list">
     <div class="selection-list__search">
         <input type="search" class="selection-list__search-input" placeholder="Search..." />
     </div>
-    <div class="selection-list__items space-y-2" id="{{ $name }}-list">
+    <div class="selection-list__items selection-list__items--{{ $size }} space-y-2" id="{{ $name }}-list">
         @forelse($items as $item)
             <div class="selection-list__checkbox">
                 <input

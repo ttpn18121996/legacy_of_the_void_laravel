@@ -136,19 +136,19 @@ body {
     padding-bottom: 1rem;
 }
 
-.space-x-4>*+* {
+.space-x-4 > * + * {
     margin-left: 1rem;
 }
 
-.space-x-2>*+* {
+.space-x-2 > * + * {
     margin-left: .5rem;
 }
 
-.space-y-4>*+* {
+.space-y-4 > * + * {
     margin-top: 1rem;
 }
 
-.space-y-2>*+* {
+.space-y-2 > * + * {
     margin-top: .5rem;
 }
 

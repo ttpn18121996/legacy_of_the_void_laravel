@@ -36,7 +36,7 @@ class PublishVideo extends Command
     public function handle()
     {
         $videosPath = storage_path('app/public/approved');
-        $publishedDir = storage_path('app/public/videos');
+        $publishedDir = storage_path('app/public/media');
         $thumbnailsCount = (int) $this->option('thumbnails');
 
         if ($name = $this->option('name')) {
@@ -54,7 +54,7 @@ class PublishVideo extends Command
 
             $videoPath = "$videosPath/$video";
             $videoNameWithoutExt = pathinfo($video, PATHINFO_FILENAME);
-            $thumbnailDir = storage_path("app/public/thumbnails/{$videoNameWithoutExt}");
+            $thumbnailDir = storage_path("app/public/media/{$videoNameWithoutExt}");
 
             if (! file_exists($thumbnailDir)) {
                 mkdir($thumbnailDir, 0777, true);
@@ -95,7 +95,7 @@ class PublishVideo extends Command
                 mkdir($publishedDir, 0777, true);
             }
 
-            $destinationPath = "$publishedDir/$video";
+            $destinationPath = "{$publishedDir}/{$videoNameWithoutExt}/{$video}";
 
             if (! rename($videoPath, $destinationPath)) {
                 $this->error("Failed to move $video to published folder.");
@@ -122,7 +122,7 @@ class PublishVideo extends Command
                     ->range(1, $thumbnailsCount)
                     ->map(fn ($i) => [
                         'video_id' => $videoModel->id,
-                        'path' => "thumbnails/{$videoNameWithoutExt}/thumbnail_$i.png",
+                        'path' => "media/{$videoNameWithoutExt}/thumbnail_$i.png",
                         'is_default' => $i === 1,
                         'created_at' => $now,
                         'updated_at' => $now,
