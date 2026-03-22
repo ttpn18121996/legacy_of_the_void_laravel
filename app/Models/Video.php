@@ -39,11 +39,6 @@ class Video extends Model
         return $this->belongsToMany(Actress::class);
     }
 
-    public function categories(): BelongsToMany
-    {
-        return $this->belongsToMany(Category::class);
-    }
-
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);

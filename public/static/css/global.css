@@ -78,6 +78,10 @@ body {
     font-family: "Quicksand", sans-serif;
 }
 
+.block {
+    display: block !important;
+}
+
 .m-2 {
     margin: .5rem;
 }

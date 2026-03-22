@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Video;
 use App\Services\ActressService;
@@ -35,11 +34,6 @@ class VideoController extends Controller
     {
         $video = $this->videoService->find($id);
 
-        $categories = Category::orderBy('title')->get()
-            ->map(fn ($category) => ['value' => $category->id, 'label' => $category->title])
-            ->toArray();
-        $selectedCategories = $video->categories->pluck('id')->toArray();
-
         $actresses = $this->actressService->getOptions($video);
         $selectedActresses = collect($actresses)->filter(fn ($actress) => $actress['selected'])
             ->map(fn ($actress) => $actress['value'])
@@ -57,10 +51,8 @@ class VideoController extends Controller
         return view('videos.show', [
             'video' => $video,
             'actresses' => $actresses,
-            'categories' => $categories,
             'tags' => $tags,
             'selectedActresses' => $selectedActresses,
-            'selectedCategories' => $selectedCategories,
             'selectedTags' => $selectedTags,
             'relatedVideos' => $relatedVideos,
         ]);
@@ -157,17 +149,6 @@ class VideoController extends Controller
         $actresses = $request->input('actresses');
 
         $this->videoService->syncActresses($videoId, $actresses);
-
-        return response()->json(['success' => true]);
-    }
-
-    public function updateCategories(Request $request)
-    {
-        $videoId = $request->input('video_id');
-        $categories = $request->input('categories');
-
-        $video = Video::find($videoId);
-        $video->categories()->sync($categories);
 
         return response()->json(['success' => true]);
     }

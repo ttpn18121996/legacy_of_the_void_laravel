@@ -28,12 +28,12 @@ Route::group([
     Route::post('/actresses/update-tags', [ActressController::class, 'updateTags'])->name('actresses.update-tags');
     Route::get('/actresses/{id}', [ActressController::class, 'show'])->name('actresses.show');
 
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 
     Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
     Route::post('/videos/update-tags', [VideoController::class, 'updateTags'])->name('videos.update-tags');
     Route::post('/videos/update-actresses', [VideoController::class, 'updateActresses'])->name('videos.update-actresses');
-    Route::post('/videos/update-categories', [VideoController::class, 'updateCategories'])->name('videos.update-categories');
     Route::post('/videos/increment-like', [VideoController::class, 'incrementLike'])->name('videos.increment-like');
     Route::get('/videos/{id}', [VideoController::class, 'show'])->name('videos.show');
 

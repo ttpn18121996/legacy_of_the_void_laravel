@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
-use App\Models\Video;
-use Illuminate\Http\Request;
+use App\Services\CategoryService;
+use App\Services\VideoService;
 
 class CategoryController extends Controller
 {
-    public function show(Request $request, string $slug)
+    public function __construct(
+        protected CategoryService $categoryService,
+        protected VideoService $videoService,
+    ) {}
+    
+    public function index()
     {
-        $q = $request->query('q');
-        $category = Category::where('slug', $slug)->firstOrFail();
+        return view('categories.index', [
+            'categories' => $this->categoryService->paginate(),
+        ]);
+    }
 
-        $videos = Video::with(['thumbnails', 'tags'])
-            ->whereHas('categories', function ($query) use ($slug) {
-                $query->where('slug', $slug);
-            })
-            ->when($q, function ($query) use ($q) {
-                $query->where('title', 'like', "%{$q}%");
-            })
-            ->latest()
-            ->paginate(20)
-            ->onEachSide(2)
-            ->withQueryString();
-
+    public function show(string $slug)
+    {
+        $category = $this->categoryService->findBySlug($slug);
+        $tags = $category->tags;
+        $videos = $this->videoService->paginateWithThumbnailsByTags($tags->pluck('id')->toArray());
+        
         return view('videos.index', [
             'videos' => $videos,
-            'category' => $category,
+            'filteredTags' => $tags,
         ]);
     }
 }

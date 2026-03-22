@@ -22,7 +22,7 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required',
+            'title' => ['required', 'unique:tags,title'],
         ]);
 
         $this->tagService->create($data);

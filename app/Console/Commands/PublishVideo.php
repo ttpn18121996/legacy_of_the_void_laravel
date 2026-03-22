@@ -168,8 +168,6 @@ class PublishVideo extends Command
             return $tags;
         }
 
-        $tags[] = Tag::where('title', 'fff-plus')->first()?->id;
-
         if ($countActresses === 2) {
             $tags[] = Tag::where('title', 'threesome')->first()?->id;
         } elseif ($countActresses === 3) {

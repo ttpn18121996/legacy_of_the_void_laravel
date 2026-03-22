@@ -1,29 +1,32 @@
 'use strict';
 
 const categoriesIndex = function () {
-  lotv.bindEvent('#categories-table .btn-edit', 'click', e => {
+  lotv.bindEvent('#categories-table .btn-delete', 'click', e => {
     e.preventDefault();
-    const btnUpdateCategory = e.target;
-    const id = btnUpdateCategory.dataset.id;
-    const url = btnUpdateCategory.dataset.url;
-    const inputCategory = document.getElementById(`category${id}`);
+    const btnDeleteCategory = e.target;
+    const categoryId = btnDeleteCategory.dataset.id;
+    const url = btnDeleteCategory.dataset.url;
 
-    lotv.ajax({
-      method: 'PUT',
-      url,
-      data: {
-        title: inputCategory.value,
-      },
-      success: res => {
-        if (res?.success) {
-          lotv.toast.fire({
-            title: 'Success',
-            message: res.message,
-            type: 'success',
-          });
-          document.getElementById(`slug${id}`).innerText = res.data.slug;
-        }
+    const dialog = confirmDialog({
+      title: 'Confirm Deletion',
+      message: 'Are you sure you want to delete this category? This action cannot be undone.',
+      onConfirm: () => {
+        lotv.ajax({
+          method: 'DELETE',
+          url,
+          success: res => {
+            if (res?.success) {
+              lotv.toast.fire({
+                title: 'Success',
+                message: res.message,
+                type: 'success',
+              });
+              document.getElementById(`category${categoryId}`).remove();
+            }
+          },
+        });
       },
     });
+    dialog.show();
   });
 };

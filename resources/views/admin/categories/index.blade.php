@@ -31,27 +31,34 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Slug</th>
+                    <th>Tags</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($categories as $category)
-                    <tr>
+                    <tr id="category{{ $category->id }}">
                         <td>{{ $category->id }}</td>
-                        <td class="editable">
-                            <input type="text" value="{{ $category->title }}" id="category{{ $category->id }}">
+                        <td>{{ $category->title }}</td>
+                        <td>{{ $category->slug }}</td>
+                        <td>
+                            <div class="table__tags space-x-2">
+                                @forelse($category->tags as $tag)
+                                    <a href="{{ get_filter_tag_url($tag->slug) }}">{{ $tag->title_for_human }}</a>
+                                @empty
+                                @endforelse
+                            </div>
                         </td>
-                        <td id="slug{{ $category->id }}">{{ $category->slug }}</td>
                         <td>
                             <div class="table__actions space-x-2">
+                                <a href="{{ route('admin.categories.edit', ['id' => $category->id]) }}" class="btn--sm btn--primary">Edit</a>
                                 <button
                                     data-id="{{ $category->id }}"
-                                    data-url="{{ route('admin.categories.update', ['id' => $category->id]) }}"
-                                    class="btn--sm btn--primary btn-edit"
+                                    data-url="{{  route('admin.categories.destroy', ['id' => $category->id]) }}"
+                                    class="btn--sm btn--secondary btn-delete"
                                 >
-                                    Edit
+                                    Delete
                                 </button>
-                                <button data-id="{{ $category->id }}" class="btn--sm btn--secondary btn-delete">Delete</button>
                             </div>
                         </td>
                     </tr>
@@ -66,6 +73,7 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('static/js/confirm-dialog.js?v='.time()) }}"></script>
     <script src="{{ asset('static/js/admin/categories-index.js?v='.time()) }}"></script>
     <script>
         categoriesIndex();

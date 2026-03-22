@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class CategoryVideo extends Pivot
+class CategoryTag extends Pivot
 {
     //
 }

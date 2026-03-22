@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Log;
 class VideoService
 {
     public function __construct(
-        private Video $video,
+        protected Video $video,
     ) {}
 
     public function paginateWithThumbnails(array $filters = [])
@@ -59,9 +59,21 @@ class VideoService
             ->withQueryString();
     }
 
+    public function paginateWithThumbnailsByTags(array $tagIds)
+    {
+        return Video::with(['thumbnails', 'tags'])
+            ->whereHas('tags', function ($query) use ($tagIds) {
+                $query->whereIn('tags.id', $tagIds);
+            })
+            ->latest()
+            ->paginate(20)
+            ->onEachSide(2)
+            ->withQueryString();
+    }
+
     public function find(string $id): Video
     {
-        return Video::with(['thumbnails', 'tags', 'actresses', 'categories'])
+        return Video::with(['thumbnails', 'tags', 'actresses'])
             ->where('id', $id)
             ->firstOrFail();
     }
