@@ -6,6 +6,7 @@ use App\Models\Actress;
 use App\Models\Tag;
 use App\Models\Video;
 use App\Models\VideoThumbnail;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -129,17 +130,12 @@ class PublishVideo extends Command
                     ])
                     ->toArray());
 
-                $actressNames = Str::of($videoNameWithoutExt)
-                    ->before(' - ')
-                    ->explode(',')
-                    ->map(fn ($name) => trim($name))
-                    ->filter()
-                    ->toArray();
+                $actresses = $this->processActressesForVideo(
+                    Str::of($videoNameWithoutExt)->before(' - ')->explode(',')->map(fn ($name) => trim($name))->filter(),
+                    $videoModel,
+                );
 
-                $tags = $this->getTagsForSome(count($actressNames));
-
-                $actresses = Actress::whereIn('name', $actressNames)->with(['tags'])->get();
-                $videoModel->actresses()->attach($actresses->pluck('id')->toArray());
+                $tags = $this->getTagsForSome($actresses->count());
 
                 $tags = $actresses->flatMap(fn ($actress) => $actress->tags->pluck('id'))->merge($tags)->unique()->toArray();
                 $videoModel->tags()->attach($tags);
@@ -177,5 +173,28 @@ class PublishVideo extends Command
         }
 
         return $tags;
+    }
+
+    protected function processActressesForVideo(Collection $actressNames, Video $videoModel): Collection
+    {
+        $actresses = Actress::whereIn('name', $actressNames)->with(['tags'])->get();
+        $videoModel->actresses()->attach($actresses->pluck('id')->toArray());
+
+        $actressDoestNotExist = $actressNames->diff($actresses->pluck('name')->toArray());
+        
+        if ($actressDoestNotExist->isNotEmpty()) {
+            foreach ($actressDoestNotExist as $actressName) {
+                $actress = Actress::create([
+                    'name' => $actressName,
+                    'another_name' => $actressName,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $videoModel->actresses()->attach($actress->id);
+                $actresses->push($actress);
+            }
+        }
+        
+        return $actresses;
     }
 }
