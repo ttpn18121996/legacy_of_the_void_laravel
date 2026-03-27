@@ -8,7 +8,9 @@ trait HasFilePath
 {
     public function getPublicPathAttribute()
     {
-        $url = parse_url(Storage::disk('public')->url($this->getPath()));
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $fileSystem */
+        $fileSystem = Storage::disk('public');
+        $url = parse_url($fileSystem->url($this->getPath()));
 
         return $url['path'];
     }
