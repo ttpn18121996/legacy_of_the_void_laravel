@@ -26,17 +26,20 @@
                             #{{ $index + 1 }} | {{ $video->title }}
                             <p>{{ $video->created_at }}</p>
                         </a>
-                        <form class="data__item--button" action="{{ route('list-view.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="title" value="{{ $video->title }}">
-                            @if ($video->path === PathType::REVIEW->value)
-                                <input type="hidden" name="path" value="reviews">
-                                <button class="data__state--list state--success">Approve</button>
-                            @elseif ($video->path === PathType::APPROVED->value)
-                                <input type="hidden" name="path" value="approved">
-                                <button class="data__state--list state--warning">Reject</button>
-                            @endif
-                        </form>
+
+                        @if (in_array($video->path, [PathType::REVIEW->value, PathType::APPROVED->value]))
+                            <form class="data__item--button" action="{{ route('list-view.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="title" value="{{ $video->title }}">
+                                @if ($video->path === PathType::REVIEW->value)
+                                    <input type="hidden" name="path" value="reviews">
+                                    <button class="data__state--list state--success">Approve</button>
+                                @elseif ($video->path === PathType::APPROVED->value)
+                                    <input type="hidden" name="path" value="approved">
+                                    <button class="data__state--list state--warning">Reject</button>
+                                @endif
+                            </form>
+                        @endif
                     @endif
                 </div>
             @endforeach

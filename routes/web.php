@@ -59,6 +59,9 @@ Route::group([
         session()->put('is_terminal', true);
         return to_route('terminal.main');
     })->name('connect-terminal');
+    Route::get('/todo-list', function () {
+        return view('todo-list');
+    })->name('todo-list');
 });
 
 require __DIR__.'/terminal.php';

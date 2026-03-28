@@ -48,6 +48,7 @@
             </div>
         </form>
     </div>
+
     <script src="{{ asset('static/js/app.js?v='.time()) }}"></script>
     <script>
         lotv.init();

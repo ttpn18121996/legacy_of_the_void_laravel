@@ -26,11 +26,13 @@
     font-size: 1.5rem;
 }
 
-.video__actions {
+.video__actions,
+.video__actions form {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 1rem 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .video__actions button,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\PathType;
 use App\Services\VideoService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 
@@ -52,7 +53,18 @@ class ListViewController extends Controller
             ]);
         }
 
-        $pathTo = $path === PathType::REVIEW->value ? PathType::APPROVED->value : PathType::REVIEW->value;
+        try {
+            $pathTo = match ($path) {
+                PathType::REVIEW->value => PathType::APPROVED->value,
+                PathType::APPROVED->value => PathType::REVIEW->value,
+                PathType::TRASH->value => PathType::REVIEW->value,
+                default => throw new Exception('Invalid path type.'),
+            };
+        } catch (Exception $e) {
+            return back()->withErrors([
+                'video' => $e->getMessage(),
+            ]);
+        }
 
         $videoPath = storage_path("app/public/{$path}/{$title}.mp4");
         $pointPath = storage_path("app/public/{$pathTo}/{$title}.mp4");
@@ -100,7 +112,18 @@ class ListViewController extends Controller
      */
     public function destroy(Request $request)
     {
-        $result = $this->videoService->moveToTrash($request->query('title'), $request->query('path'));
+        $path = $request->query('path', PathType::REVIEW->value);
+        $title = $request->query('title');
+
+        if (
+            $request->query('permanent') === '1'
+            && $path === PathType::TRASH->value
+            && file_exists(storage_path("app/public/trash/{$title}.mp4"))
+        ) {
+            $result = unlink(storage_path("app/public/trash/{$title}.mp4"));
+        } else {
+            $result = $this->videoService->moveToTrash($title, $path);
+        }
 
         if (! $result) {
             return back()->withErrors([
@@ -108,6 +131,6 @@ class ListViewController extends Controller
             ]);
         }
 
-        return redirect(route('list-view.index', ['path' => PathType::REVIEW->value]));
+        return redirect(route('list-view.index', ['path' => $path]));
     }
 }

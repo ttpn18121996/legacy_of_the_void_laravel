@@ -11,7 +11,10 @@ use App\Models\Video;
 use App\Models\VideoThumbnail;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use RuntimeException;
+use Throwable;
 
 class VideoService
 {
@@ -71,6 +74,13 @@ class VideoService
             ->withQueryString();
     }
 
+    /**
+     * Find video by ID
+     * 
+     * @param string $id
+     * @return Video
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<Video>
+     */
     public function find(string $id): Video
     {
         return Video::with(['thumbnails', 'tags', 'actresses'])
@@ -78,6 +88,14 @@ class VideoService
             ->firstOrFail();
     }
 
+    /**
+     * Update video
+     * 
+     * @param array $data
+     * @param string $id
+     * @return Video
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<Video>
+     */
     public function update(array $data, string $id): Video
     {
         $video = Video::findOrFail($id);
@@ -111,60 +129,74 @@ class VideoService
         return $video;
     }
 
+    /**
+     * Delete video
+     * 
+     * @param string $id
+     * @return bool
+     */
     public function delete(string $id): bool
     {
-        $video = Video::findOrFail($id);
+        try {
+            $video = Video::findOrFail($id);
+            $videoTitle = $video->title;
 
-        $result = $this->moveToTrash($video->title, $video->isOldPath() ? 'videos' : "media/{$video->title}");
+            DB::beginTransaction();
 
-        if (! $result) {
-            Log::error("Failed to move video to trash: {$video->title}");
+            $video->thumbnails()->delete();
+            $video->tags()->detach();
+            $video->actresses()->detach();
+            $video->delete();
+
+            DB::commit();
+
+            $this->moveToTrash($videoTitle, "media/{$videoTitle}");
+
+            return true;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Log::error($e->getMessage());
 
             return false;
         }
-
-        $video->thumbnails()->delete();
-        $video->tags()->detach();
-        $video->actresses()->detach();
-        $video->categories()->detach();
-        $video->delete();
-
-        return true;
     }
 
-    public function moveToTrash($title, $from = 'reviews')
+    /**
+     * Move video to trash
+     * 
+     * @param string $title
+     * @param string $from
+     * @return void
+     * @throws RuntimeException
+     */
+    public function moveToTrash($title, $from = 'reviews'): void
     {
         $videoPath = storage_path("app/public/{$from}/{$title}.mp4");
         $pointPath = storage_path("app/public/trash/{$title}.mp4");
-        $thumbnailPath = storage_path("app/public/thumbnails/{$title}");
+        $thumbnailPath = storage_path("app/public/{$from}");
 
         if (! file_exists($videoPath)) {
-            Log::error("Video not found: {$videoPath}");
-
-            return false;
+            throw new RuntimeException("Video not found: {$videoPath}");
         }
 
         if (! rename($videoPath, $pointPath)) {
-            Log::error("Failed to move video: {$videoPath}");
-
-            return false;
-        }
-
-        if (str($from)->startsWith('media')) {
-            $thumbnailPath = storage_path("app/public/{$from}");
+            throw new RuntimeException("Failed to move video: {$videoPath}");
         }
 
         if (file_exists($thumbnailPath)) {
             if (! force_rmdir($thumbnailPath)) {
-                Log::error("Failed to move thumbnail: {$thumbnailPath}");
-
-                return false;
+                throw new RuntimeException("Failed to move thumbnail: {$thumbnailPath}");
             }
         }
-
-        return true;
     }
 
+    /**
+     * Sync actresses for video
+     * 
+     * @param string $videoId
+     * @param array $actresses
+     * @return void
+     */
     public function syncActresses(string $videoId, array $actresses): void
     {
         $video = Video::find($videoId);
@@ -182,6 +214,13 @@ class VideoService
         $this->syncTagsByActress($video, $actresses);
     }
 
+    /**
+     * Sync tags for video by actresses
+     * 
+     * @param Video $video
+     * @param array $actresses
+     * @return void
+     */
     public function syncTagsByActress(Video $video, array $actresses): void
     {
         $tags = Actress::whereIn('id', $actresses)->with(['tags'])
@@ -196,6 +235,12 @@ class VideoService
         $video->tags()->sync($tags);
     }
 
+    /**
+     * Search videos by keyword
+     * 
+     * @param string $keyword
+     * @return Collection
+     */
     public function search(string $keyword)
     {
         return $this->video->where('title', 'like', "%{$keyword}%")
@@ -205,6 +250,12 @@ class VideoService
             ->get(['id', 'title']);
     }
 
+    /**
+     * Increment like for video
+     * 
+     * @param string $videoId
+     * @return bool
+     */
     public function incrementLike(string $videoId): bool
     {
         $video = Video::find($videoId);
@@ -218,12 +269,19 @@ class VideoService
             $video->saveQuietly();
 
             return true;
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             Log::error("Error incrementing like for video ID {$videoId}: " . $e->getMessage());
             return false;
         }
     }
 
+    /**
+     * Get related videos
+     * 
+     * @param Video $video
+     * @param int $limit
+     * @return Collection
+     */
     public function getRelatedVideos(Video $video, int $limit = 10)
     {
         $actressIds = $video->actresses->pluck('id')->toArray();
@@ -254,6 +312,12 @@ class VideoService
         return $relatedVideos;
     }
 
+    /**
+     * Get random videos
+     * 
+     * @param int $limit
+     * @return Collection
+     */
     public function getRandomVideos(int $limit = 5)
     {
         return Video::with(['thumbnails'])
@@ -262,6 +326,12 @@ class VideoService
             ->get();
     }
 
+    /**
+     * Get videos for review
+     * 
+     * @param PathType $path
+     * @return Collection
+     */
     public function getVideosForReview(PathType $path): Collection
     {
         $reviewPath = storage_path('app/public/'.$path->value);
@@ -273,16 +343,31 @@ class VideoService
 
         return collect($videos)
             ->filter(fn ($file) => $file !== '.' && $file !== '..')
-            ->map(fn ($file) => (object) [
-                'title' => (string) str($file)->beforeLast('.mp4'),
-                'path' => $path->value,
-                'created_at' => date('Y-m-d H:i:s', filectime($reviewPath.'/'.$file)),
-                'is_download' => str($file)->endsWith('.mp4.crdownload'),
-            ])
+            ->map(function ($file) use ($path, $reviewPath) {
+                $createdAt = filectime($reviewPath.'/'.$file);
+
+                if ($createdAt === false) {
+                    return null;
+                }
+
+                return (object) [
+                    'title' => (string) str($file)->beforeLast('.mp4'),
+                    'path' => $path->value,
+                    'created_at' => date('Y-m-d H:i:s', $createdAt),
+                    'is_download' => str($file)->endsWith('.mp4.crdownload'),
+                ];
+            })
+            ->filter()
             ->sort(fn ($a, $b) => strtotime($b->created_at) <=> strtotime($a->created_at))
             ->values();
     }
 
+    /**
+     * Get all videos for terminal
+     * 
+     * @param array $filters
+     * @return Collection
+     */
     public function getAllForTerminal(array $filters = []): Collection
     {
         $tagSlugs = Arr::get($filters, 'tags', []);

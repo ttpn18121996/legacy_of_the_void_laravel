@@ -21,27 +21,55 @@
         </div>
         <div class="video__actions space-x-2">
             @if (in_array($path, PathType::reviewable()))
-                <form action="{{ route('list-view.store') }}" method="POST">
+                <form action="{{ route('list-view.store') }}" method="POST" class="space-x-2">
                     @csrf
                     <input type="hidden" name="title" value="{{ $title }}">
                     <input type="hidden" name="path" value="{{ $path }}">
-                    <button class="{{ $path === PathType::REVIEW->value ? 'video__actions--success' : 'video__actions--warning' }}">
-                        {{ $path === PathType::REVIEW->value ? 'Aprove' : 'Reject' }}
-                    </button>
+                    @switch($path)
+                        @case(PathType::REVIEW->value)
+                            <button type="submit" class="video__actions--success">
+                                Aprove
+                            </button>
+                            @break
+                        @case(PathType::APPROVED->value)
+                            <button type="submit" class="video__actions--warning">
+                                Reject
+                            </button>
+                            <button type="button" class="video__actions--info" id="publish-video">
+                                Publish
+                            </button>
+                            @break
+                        @case(PathType::TRASH->value)
+                            <button type="submit" class="video__actions--success">
+                                Restore
+                            </button>
+                            @break
+                        @default
+                    @endswitch
                 </form>
             @endif
-            @if ($path === PathType::APPROVED->value)
-                <button class="video__actions--info" id="publish-video" type="submit">
-                    Publish
-                </button>
-            @endif
-            <form action="{{ route('list-view.destroy', ['title' => $title, 'path' => $path]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button class="video__actions--danger" type="submit">
-                    Move to trash
-                </button>
-            </form>
+            @switch($path)
+                @case(PathType::REVIEW->value)
+                @case(PathType::APPROVED->value)
+                    <form action="{{ route('list-view.destroy', ['title' => $title, 'path' => $path]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="video__actions--danger" type="submit">
+                            Move to trash
+                        </button>
+                    </form>
+                    @break
+                @case(PathType::TRASH->value)
+                    <form action="{{ route('list-view.destroy', ['title' => $title, 'path' => $path, 'permanent' => '1']) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="video__actions--danger" type="submit">
+                            Permanent Delete
+                        </button>
+                    </form>
+                    @break
+                @default
+            @endswitch
         </div>
     </div>
 @endsection
