@@ -255,8 +255,16 @@ body {
     height: 1rem;
 }
 
+.icon-info {
+    color: var(--info);
+}
+
 .icon-success {
     color: var(--success);
+}
+
+.icon-warning {
+    color: var(--warning);
 }
 
 .icon-danger {
