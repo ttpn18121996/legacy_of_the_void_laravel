@@ -46,7 +46,7 @@
             </div>
 
             <div class="form-input">
-                <label for="tags">Actresses</label>
+                <label for="actresses">Actresses</label>
                 <x-selection-list name="actresses" :items="$actresses" :selected-items="$selectedActresses" size="sm" />
             </div>
             

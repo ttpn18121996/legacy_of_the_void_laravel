@@ -183,7 +183,7 @@ class VideoService
             throw new RuntimeException("Failed to move video: {$videoPath}");
         }
 
-        if (file_exists($thumbnailPath)) {
+        if (str($thumbnailPath)->startsWith('media/') && is_dir($thumbnailPath)) {
             if (! force_rmdir($thumbnailPath)) {
                 throw new RuntimeException("Failed to move thumbnail: {$thumbnailPath}");
             }
