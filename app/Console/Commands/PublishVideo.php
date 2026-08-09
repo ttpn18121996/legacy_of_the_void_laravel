@@ -112,7 +112,7 @@ class PublishVideo extends Command
             try {
                 $videoModel = Video::create([
                     'title' => $videoNameWithoutExt,
-                    'path' => "videos/{$video}",
+                    'path' => "media/{$videoNameWithoutExt}/{$video}",
                     'duration' => gmdate('H:i:s', $durationInSeconds),
                     'dimensions' => $dimensions,
                 ]);

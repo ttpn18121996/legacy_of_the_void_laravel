@@ -12,7 +12,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Middleware\RedirectToTerminal;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/login', 'login')->name('login');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/videos/stream', [VideoController::class, 'streamingViaNginx'])->name('videos.stream');
 

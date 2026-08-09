@@ -166,10 +166,10 @@ class VideoService
      * 
      * @param string $title
      * @param string $from
-     * @return void
+     * @return bool
      * @throws RuntimeException
      */
-    public function moveToTrash($title, $from = 'reviews'): void
+    public function moveToTrash($title, $from = 'reviews'): bool
     {
         $videoPath = storage_path("app/public/{$from}/{$title}.mp4");
         $pointPath = storage_path("app/public/trash/{$title}.mp4");
@@ -183,11 +183,13 @@ class VideoService
             throw new RuntimeException("Failed to move video: {$videoPath}");
         }
 
-        if (str($thumbnailPath)->startsWith('media/') && is_dir($thumbnailPath)) {
+        if (str($from)->startsWith('media/') && is_dir($thumbnailPath)) {
             if (! force_rmdir($thumbnailPath)) {
                 throw new RuntimeException("Failed to move thumbnail: {$thumbnailPath}");
             }
         }
+
+        return true;
     }
 
     /**

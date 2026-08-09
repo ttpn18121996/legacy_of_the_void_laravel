@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -11,7 +12,7 @@ class AuthController extends Controller
 
     public function showLoginForm()
     {
-        if (auth()->check()) {
+        if (Auth::check()) {
             return to_route($this->redirectTo);
         }
 
@@ -28,7 +29,7 @@ class AuthController extends Controller
         $data['email'] = str($data['email'])->append('@example.com')->lower()->toString();
         $credentials = Arr::only($data, ['email', 'password']);
 
-        if (! auth()->attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return back()->withErrors([
                 'email' => __('auth.failed'),
             ]);
@@ -45,7 +46,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        auth()->logout();
+        Auth::logout();
 
         if ($request->hasSession()) {
             $request->session()->invalidate();
